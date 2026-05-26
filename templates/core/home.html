@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h4> castle destination</h4>
+    {% for d in dest %}
+    <hr>
+    <h2>{{d.castle}}</h2>
+    <p>{{d.country}}</p>
+    <p>{{d.description}}</p>
+    <img src="{{ d.image.url }}" alt="{{ d.castle }}" style="max-width:400px;">
+    <hr>
+    {%endfor%}
+    
+</body>
+</html>

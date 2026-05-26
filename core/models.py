@@ -6,7 +6,7 @@ class Destination(models.Model):
     castle = models.CharField(max_length=100, unique=True)
     country = models.CharField(max_length=100)
     description = models.TextField()
-    image = models.ImageField(upload_to="core")
+    image = models.ImageField(upload_to="static")
     atmosphere = models.FloatField()
 
 
