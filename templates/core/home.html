@@ -15,9 +15,9 @@
             <p class="text-muted">Explore enchanting castles with memorable atmosphere, region details, and curated tags.</p>
         </div>
 
-        <div class="row g-4 destination-list">
+        <div class="destination-list">
             {% for d in dest %}
-            <div class="col-12 col-md-6 col-xl-4">
+            <div class="card-column">
                 <article class="destination-card card h-100">
                     {% if d.image %}
                     <img src="{{ d.image.url }}" alt="{{ d.castle }}" class="card-img-top">
