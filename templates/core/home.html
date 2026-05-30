@@ -15,9 +15,9 @@
             <p class="text-muted">Explore enchanting castles with memorable atmosphere, region details, and curated tags.</p>
         </div>
 
-        <div class="destination-list">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 destination-list">
             {% for d in dest %}
-            <div class="card-column">
+            <div class="col">
                 <article class="destination-card card h-100">
                     {% if d.image %}
                     <img src="{{ d.image.url }}" alt="{{ d.castle }}" class="card-img-top">
@@ -26,13 +26,26 @@
                         <div>
                             <h2 class="destination-card-title h4">{{ d.castle }}</h2>
                             <p class="destination-card-subtitle mb-3">{{ d.country }}</p>
-                            <p class="destination-card-text">{{ d.description }}</p>
+                            <p class="destination-card-text mb-3">{{ d.description }}</p>
                         </div>
+
+                        {% if d.review_set.all %}
+                        <div class="review-section mb-3">
+                            <h6 class="review-title">Reviews</h6>
+                            {% for review in d.review_set.all %}
+                            <div class="review-card mb-2 p-3 rounded-3">
+                                <p class="review-text mb-1">{{ review.comment }}</p>
+                                <p class="review-meta mb-0">Rating: {{ review.rating }} · User .  {{ review.user }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
                         <div class="mt-auto">
                             <p class="destination-card-text mb-2"><strong>Atmosphere:</strong> {{ d.atmosphere }}</p>
-                            <div class="destination-card-meta">
+                            <div class="destination-card-meta d-flex flex-wrap gap-1">
                                 {% for tag in d.tags.all %}
-                                    <span>{{ tag.name }}</span>
+                                    <span class="badge rounded-pill bg-secondary">{{ tag.name }}</span>
                                 {% endfor %}
                             </div>
                         </div>
