@@ -9,13 +9,13 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <div class="login-card">
+        <div class="auth-card">
             <h1>Login</h1>
             <p class="subtitle">Login to your account</p>
             {% if error %}
                 <p class="error">{{ error }}</p>
             {% endif %}
-            <form method="POST" class="login-form">
+            <form method="POST" class="auth-form">
                 {% csrf_token %}
                 <label>
                     Username

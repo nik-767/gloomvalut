@@ -2,8 +2,8 @@ body {
     margin: 0;
     min-height: 100vh;
     font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: linear-gradient(135deg, #1b2028 0%, #273040 48%, #1a2330 100%);
-    color: #f5f7fb;
+    background: linear-gradient(135deg, #0f172a 0%, #111827 42%, #0b1121 100%);
+    color: #e2e8f0;
 }
 
 .page-wrapper {
@@ -14,93 +14,176 @@ body {
     padding: 24px;
 }
 
-.login-card {
+.auth-card {
     width: 100%;
-    max-width: 420px;
-    padding: 32px;
-    background: rgba(20, 28, 44, 0.94);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    max-width: 460px;
+    padding: 36px;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 28px;
+    box-shadow: 0 30px 80px rgba(15, 23, 42, 0.35);
 }
 
-.login-card h1 {
-    margin: 0 0 12px;
-    font-size: 2rem;
-    letter-spacing: -0.04em;
+.auth-card h1 {
+    margin: 0 0 10px;
+    font-size: 2.35rem;
+    line-height: 1.05;
 }
 
 .subtitle {
-    margin: 0 0 24px;
-    color: #adb7d2;
-    line-height: 1.5;
+    margin: 0 0 28px;
+    color: #94a3b8;
+    line-height: 1.7;
 }
 
 .error {
-    margin: 0 0 16px;
-    padding: 12px 14px;
-    border-radius: 12px;
-    background: rgba(255, 72, 66, 0.15);
-    color: #ff9b99;
-    border: 1px solid rgba(255, 72, 66, 0.24);
-}
-
-.login-form {
-    display: grid;
-    gap: 16px;
-}
-
-.login-form label {
-    display: grid;
-    gap: 8px;
-    font-size: 0.95rem;
-    color: #e3e9f2;
-}
-
-.login-form input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin: 0 0 18px;
+    padding: 14px 16px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.05);
-    color: #f8fbff;
+    background: rgba(248, 113, 113, 0.14);
+    color: #fecaca;
+    border: 1px solid rgba(248, 113, 113, 0.22);
+}
+
+.auth-form {
+    display: grid;
+    gap: 18px;
+}
+
+.auth-form label {
+    display: grid;
+    gap: 10px;
+    font-size: 0.96rem;
+    color: #cbd5e1;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.75);
+    color: #f8fafc;
     font-size: 1rem;
 }
 
-.login-form input:focus {
+.auth-form input::placeholder {
+    color: rgba(226, 232, 240, 0.6);
+}
+
+.auth-form input:focus {
     outline: none;
-    border-color: rgba(108, 138, 255, 0.85);
-    box-shadow: 0 0 0 3px rgba(108, 138, 255, 0.16);
+    border-color: rgba(96, 165, 250, 0.9);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
 }
 
 .btn {
     width: 100%;
-    padding: 14px 18px;
+    padding: 14px 0;
     border: none;
-    border-radius: 14px;
-    background: linear-gradient(90deg, #4b6cf7 0%, #5fc7ff 100%);
+    border-radius: 16px;
+    background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
     color: #0f172a;
     font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
     transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 18px 32px rgba(58, 133, 255, 0.24);
+    box-shadow: 0 18px 30px rgba(59, 130, 246, 0.25);
 }
 
 .footer-text {
-    margin: 22px 0 0;
+    margin: 24px 0 0;
     font-size: 0.95rem;
-    color: #a5b5d5;
+    color: #cbd5e1;
 }
 
 .footer-text a {
-    color: #7fd3ff;
+    color: #93c5fd;
     text-decoration: none;
 }
 
 .footer-text a:hover {
     text-decoration: underline;
+}
+
+.home-hero {
+    text-align: center;
+    padding: 4rem 0 2rem;
+}
+
+.home-hero .hero-title {
+    color: #f8fafc;
+    letter-spacing: -0.04em;
+}
+
+.home-hero p {
+    color: #cbd5e1;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.destination-list {
+    margin-top: 1.5rem;
+}
+
+.destination-card {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.destination-card .card-img-top {
+    height: 240px;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.destination-card:hover .card-img-top {
+    transform: scale(1.03);
+}
+
+.destination-card-body {
+    padding: 1.5rem;
+}
+
+.destination-card-title {
+    margin-bottom: 0.5rem;
+    color: #eef2ff;
+}
+
+.destination-card-subtitle {
+    color: #94a3b8;
+}
+
+.destination-card-text {
+    color: #cbd5e1;
+}
+
+.review-section .review-title {
+    font-size: 0.95rem;
+    color: #e2e8f0;
+}
+
+.review-card {
+    background: rgba(30, 41, 59, 0.92);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.review-text,
+.review-meta {
+    color: #cbd5e1;
+}
+
+.destination-card-meta .badge {
+    background: rgba(99, 102, 241, 0.14);
+    color: #c7d2fe;
+}
+
+.container {
+    max-width: 1200px;
 }

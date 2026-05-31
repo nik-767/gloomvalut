@@ -3,21 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>register</title>
+    <title>Register</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/styles.css' %}">
 </head>
 <body>
-    <h3> Register you account</h3>
-    
-    <form method="POST">
-        {%csrf_token%}
-       <input type="text" name="username" placeholder="enter your name"> <b> UserName</b>
-       <br>
-       <br>
-       <input type="password" name="password" placeholder="enter your password"> <b> Password</b>
-       <br>
-       <br>
-       <button type="submit">submit</button>
-    </form>
-     <a href="{% url 'login' %}">Login</a>
+    <div class="page-wrapper">
+        <div class="auth-card">
+            <h1>Create Account</h1>
+            <p class="subtitle">Register a new account to explore the castles.</p>
+            <form method="POST" class="auth-form">
+                {% csrf_token %}
+                <label>
+                    Username
+                    <input type="text" name="username" placeholder="Enter your username" required>
+                </label>
+                <label>
+                    Password
+                    <input type="password" name="password" placeholder="Enter your password" required>
+                </label>
+                <button type="submit" class="btn">Register</button>
+            </form>
+            <p class="footer-text">
+                Already have an account? <a href="{% url 'login' %}">Login</a>
+            </p>
+        </div>
+    </div>
 </body>
 </html>
