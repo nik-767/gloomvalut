@@ -22,8 +22,10 @@ from core.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Register, name='Register'),
+    path('', Register, name='register'),
+    path('login/', login_view, name='login'),
     path('home/', home , name='home' ),
+
 ]
 
 if settings.DEBUG:
