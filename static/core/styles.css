@@ -11,7 +11,8 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 24px;
+    padding: 24px;    box-sizing: border-box;
+
 }
 
 .auth-card {
@@ -177,6 +178,60 @@ body {
 .review-text,
 .review-meta {
     color: #cbd5e1;
+}
+
+.reviews {
+    background: rgba(15, 23, 42, 0.94);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 24px;
+    padding: 24px;
+    margin: 1.5rem auto;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(240px, 1fr));
+    gap: 24px;
+    box-shadow: 0 30px 70px rgba(15, 23, 42, 0.28);
+}
+
+.review-title {
+    grid-column: 1 / -1;
+    margin: 0 0 1.5rem;
+    color: #f8fafc;
+    font-size: 1.8rem;
+    letter-spacing: -0.03em;
+}
+
+.review-card {
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 22px;
+    padding: 22px;
+    margin-bottom: 1.25rem;
+}
+
+.review-item {
+    margin: 0 0 0.85rem;
+    color: #cbd5e1;
+    line-height: 1.7;
+}
+
+.review-item-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #eef2ff;
+}
+
+.review-item-meta {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.reviews img {
+    width: 100%;
+    height: auto;
+    border-radius: 18px;
+    margin-top: 1rem;
+    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.24);
 }
 
 .destination-card-meta .badge {

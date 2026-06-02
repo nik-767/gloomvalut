@@ -47,6 +47,9 @@
                                 {% for tag in d.tags.all %}
                                     <span class="badge rounded-pill bg-secondary">{{ tag.name }}</span>
                                 {% endfor %}
+                                <!-- Inside your home.html loop -->
+<a href="{% url 'review_view' d.id %}">View Review</a>
+
                             </div>
                         </div>
                     </div>

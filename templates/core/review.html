@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/styles.css' %}">
+    <title>review</title>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="reviews">
+            <h2 class="review-title">Reviews</h2>
+            <div class="review-card">
+                <p class="review-item review-item-title">{{ watching.castle }}</p>
+                <p class="review-item review-item-meta">{{ watching.country }}</p>
+                <p class="review-item">{{ watching.desription }}</p>
+                {% if watching.image %}
+                    <img src="{{ watching.image.url }}" alt="{{ watching.castle }}" class="card-img-top">
+                {% endif %}
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>

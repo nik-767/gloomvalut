@@ -2,6 +2,7 @@ from django.shortcuts import render , redirect
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout 
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 def home(request):
@@ -18,16 +19,12 @@ def Register(request):
             username=username,
             password= password
         )
-
-        
         
         return redirect('login')
     
     return render(request, "core/register.html")
 
 def login_view(request):
-    if request.user.is_authenticated:
-        return redirect('home')
 
     error = None
     if request.method == "POST":
@@ -43,4 +40,8 @@ def login_view(request):
             error = 'Invalid username or password.'
 
     return render(request, 'core/login.html', {'error': error})
-        
+    
+
+def review_view(request , Destination_id):
+    watching = get_object_or_404(Destination, id=Destination_id)
+    return render(request, 'core/review.html', {'watching': watching})
