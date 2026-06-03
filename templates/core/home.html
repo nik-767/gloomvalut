@@ -57,6 +57,35 @@
             </div>
             {% endfor %}
         </div>
+
+        <div class="auth-card mt-5" style="max-width: 600px; margin: 0 auto;">
+            <h3 class="mb-4">Add New Castle</h3>
+            <form method="POST" enctype="multipart/form-data" class="auth-form">
+                {% csrf_token %}
+                <label>
+                    Castle Name
+                    <input type="text" name="castle" placeholder="Enter castle name" required>
+                </label>
+                <label>
+                    Image
+                    <input type="file" name="image">
+                </label>
+                <label>
+                    Country
+                    <input type="text" name="country" placeholder="Enter country" required>
+                </label>
+                <label>
+                    Description
+                    <textarea name="description" placeholder="Enter description" rows="3" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;"></textarea>
+                </label>
+                <label>
+                    Atmosphere Rating
+                    <input type="number" step="0.1" name="atmosphere" placeholder="e.g. 4.5" required>
+                </label>
+                <button type="submit" class="btn">Add Castle</button>
+            </form>
+        </div>
+
     </div>
 </body>
 </html>
