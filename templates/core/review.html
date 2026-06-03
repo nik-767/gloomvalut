@@ -9,17 +9,54 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <div class="reviews">
-            <h2 class="review-title">Reviews</h2>
-            <div class="review-card">
-                <p class="review-item review-item-title">{{ watching.castle }}</p>
-                <p class="review-item review-item-meta">{{ watching.country }}</p>
-                <p class="review-item">{{ watching.desription }}</p>
+        <div class="auth-card" style="max-width: 800px;">
+            <div class="destination-detail mb-4">
+                <h1 class="review-title">{{ watching.castle }}</h1>
+                <p class="subtitle">{{ watching.country }}</p>
+                
                 {% if watching.image %}
-                    <img src="{{ watching.image.url }}" alt="{{ watching.castle }}" class="card-img-top">
+                    <img src="{{ watching.image.url }}" alt="{{ watching.castle }}" class="card-img-top rounded-3 mb-3">
+                {% endif %}
+
+                <p class="review-item"><strong>Description:</strong> {{ watching.description }}</p>
+                <p class="review-item"><strong>Atmosphere:</strong> {{ watching.atmosphere }}</p>
+            </div>
+
+            <hr>
+
+            <div class="review-section">
+                <h3 class="mb-3">User Reviews</h3>
+                {% if watching.review_set.all %}
+                    {% for review in watching.review_set.all %}
+                    <div class="review-card mb-3 p-3 border rounded-3">
+                        <p class="review-meta mb-1"><strong>{{ review.user }}</strong> rated it: {{ review.rating }}/5</p>
+                        <p class="review-text mb-0">"{{ review.comment }}"</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No reviews yet for this castle.</p>
                 {% endif %}
             </div>
-            
+
+            <hr>
+
+            <div class="add-review-section">
+                <h3 class="mb-3">Add Your Review</h3>
+                <form method="POST" class="auth-form">
+                    {% csrf_token %}
+                    <label>
+                        Rating (out of 10)
+                        <input type="number" name="rating" min="1" max="10" placeholder="Enter rating" required>
+                    </label>
+                    <label>
+                        Your Comment
+                        <textarea name="comment" placeholder="Write your review here..." rows="4" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;" required></textarea>
+                    </label>
+                    <button type="submit" class="btn">Submit Review</button>
+                </form>
+            </div>
+
+            <a href="{% url 'home' %}" class="btn mt-4" style="display: inline-block; text-decoration: none; text-align: center; background-color: #6c757d;">Back to Home</a>
         </div>
     </div>
 </body>

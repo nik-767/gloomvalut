@@ -42,6 +42,19 @@ def login_view(request):
     return render(request, 'core/login.html', {'error': error})
     
 
-def review_view(request , Destination_id):
+def review_view(request , Destination_id ):
     watching = get_object_or_404(Destination, id=Destination_id)
+
+    if request.method == "POST":
+        rating = request.POST.get("rating")
+        comment = request.POST.get("comment")
+
+        adding = Review(
+            comment = comment,
+            rating = rating,
+            user=request.user,          # The currently logged-in user
+            destination=watching 
+        )
+        adding.save()
+
     return render(request, 'core/review.html', {'watching': watching})
