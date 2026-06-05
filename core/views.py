@@ -3,6 +3,7 @@ from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout 
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 # Create your views here.
 
 def home(request):
@@ -22,8 +23,16 @@ def home(request):
         )
         add_dest.save()
         return redirect('home')
+    
+    search = request.GET.get("castle")
+    if search:
+        dest = Destination.objects.filter(
+            castle__icontains=search
+        )
+    else:
+        dest = Destination.objects.all()
 
-    dest = Destination.objects.all()
+
     return render(request, "core/home.html", {"dest": dest})
 
 def Register(request):
@@ -77,3 +86,4 @@ def review_view(request , Destination_id ):
         adding.save()
 
     return render(request, 'core/review.html', {'watching': watching})
+
