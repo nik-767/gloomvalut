@@ -27,10 +27,11 @@ def home(request):
     search = request.GET.get("castle")
     if search:
         dest = Destination.objects.filter(
-            castle__icontains=search
+            castle__icontains = search
         )
     else:
         dest = Destination.objects.all()
+
 
 
     return render(request, "core/home.html", {"dest": dest})
