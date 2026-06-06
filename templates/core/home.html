@@ -51,13 +51,11 @@
 
                         <div class="mt-auto">
                             <p class="destination-card-text mb-2"><strong>Atmosphere:</strong> {{ d.atmosphere }}</p>
-                            <div class="destination-card-meta d-flex flex-wrap gap-1">
+                            <div class="destination-card-meta d-flex flex-wrap align-items-center gap-1">
                                 {% for tag in d.tags.all %}
                                     <span class="badge rounded-pill bg-secondary">{{ tag.name }}</span>
                                 {% endfor %}
-                                <!-- Inside your home.html loop -->
-<a href="{% url 'review_view' d.id %}">View Review</a>
-
+                                <a href="{% url 'review_view' d.id %}" class="view-review-link">View Review</a>
                             </div>
                         </div>
                     </div>
@@ -84,7 +82,7 @@
                 </label>
                 <label>
                     Description
-                    <textarea name="description" placeholder="Enter description" rows="3" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;"></textarea>
+                    <textarea name="description" placeholder="Enter description" rows="3" required></textarea>
                 </label>
                 <label>
                     Atmosphere Rating
