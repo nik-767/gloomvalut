@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout 
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+
 # Create your views here.
 
 def home(request):
@@ -87,4 +88,17 @@ def review_view(request , Destination_id ):
         adding.save()
 
     return render(request, 'core/review.html', {'watching': watching})
+
+def Update_view(request, id):
+    update = get_object_or_404(Review, id=id)
+    if request.method == "POST":
+        update.comment = request.POST.get('comment')
+        update.rating = request.POST.get('rating')
+
+        update.save()
+        return redirect('review_view' ,Destination_id=update.destination_id)
+
+    return render(request, 'update.html', {'update': update})
+
+    
 
