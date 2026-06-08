@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Review</title>
+    <link rel="stylesheet" href="{% static 'core/styles.css' %}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="auth-card" style="max-width: 600px;">
+            <div class="add-review-section">
+                <h3 class="mb-4">Update Your Review</h3>
+                
+                <form method="POST" class="auth-form" action="">
+                    {% csrf_token %}
+                    
+                    <label for="id_rating">
+                        Rating (out of 10)
+                        <input type="number" id="id_rating" name="rating" min="1" max="10" value="{{ update.rating }}" required>
+                    </label>
+                    
+                    <label for="id_comment">
+                        Your Comment
+                        <textarea id="id_comment" name="comment" rows="4" required>{{ update.comment }}</textarea>
+                    </label>
+                    
+                    <button type="submit" class="btn">Submit Changes</button>
+                </form>
+            </div>
+
+            <div class="navigation-links" style="margin-top: 24px; text-align: center;">
+                <a href="{% url 'review_view' Destination_id=update.destination_id %}" class="back-home-btn">Cancel and Go Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
