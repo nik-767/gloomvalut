@@ -26,6 +26,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('home/', home , name='home' ),
     path('review/<int:Destination_id>/', review_view, name='review_view'),
+    path('review/<int:id>/update.html', Update_view, name='Update_view'),
 
 ]
 
