@@ -19,6 +19,14 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from core.views import *
+from rest_framework import routers
+from core import views
+from django.urls import path, include
+
+
+router = routers.DefaultRouter()
+router.register(r'gloomvalutview', views.gloomvalutview)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +35,9 @@ urlpatterns = [
     path('home/', home , name='home' ),
     path('review/<int:Destination_id>/', review_view, name='review_view'),
     path('review/<int:id>/update.html', Update_view, name='Update_view'),
+    path('api/', include(router.urls)),
+
+
 
 ]
 
