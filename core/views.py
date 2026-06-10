@@ -1,13 +1,14 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render , redirect 
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout 
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from rest_framework.views import APIView
+from rest_framework.views import APIView , Response
 from rest_framework import viewsets , status
-from .serializer import gloomvalutseralizer
-
+from .serializer import gloomvalutseralizer , Registerseralizer , loginseralizer
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny
 
 # Create your views here.
 
@@ -108,5 +109,30 @@ def Update_view(request, id):
 
 class gloomvalutview(viewsets.ModelViewSet):
     queryset = Destination.objects.all()
-
+    
     serializer_class = gloomvalutseralizer
+
+# creating a function to genrate tokens first 
+def genrate_token(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access' :str(refresh.access_token),
+    }
+
+class Register_api(APIView):
+    
+    permission_classes = [AllowAny]    # Is endpoint par koi bhi bina token ke aa sakta hai
+    authentication_classes = [] #gloabal settings allow kragega
+
+    def post(self,request):
+        serializer = Registerseralizer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            tokens = genrate_token(user)
+            return Response({
+                "message" : "register successfully",
+                "tokens" : tokens
+            }, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
