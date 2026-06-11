@@ -38,6 +38,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('home/', home , name='home' ),
     path('review/<int:Destination_id>/', review_view, name='review_view'),
+    path('delete/<int:id>/', views.delete_review, name='delete_review'),
     path('review/<int:id>/update.html', Update_view, name='Update_view'),
     path('api/register/',Register_api.as_view(), name='auth_register'),
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
