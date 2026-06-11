@@ -96,12 +96,17 @@ def review_view(request , Destination_id ):
 
 def Update_view(request, id):
     update = get_object_or_404(Review, id=id)
-    if request.method == "POST":
-        update.comment = request.POST.get('comment')
-        update.rating = request.POST.get('rating')
+    if update.user == request.user: 
+        if request.method == "POST":
+            update.comment = request.POST.get('comment')
+            update.rating = request.POST.get('rating')
 
-        update.save()
-        return redirect('review_view' ,Destination_id=update.destination_id)
+            update.save()
+    
+            return redirect('review_view' ,Destination_id=update.destination_id)
+    else:
+        update.user != request.user
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     return render(request, 'update.html', {'update': update})
 
@@ -140,13 +145,17 @@ class Register_api(APIView):
 def delete_review(request, id):
     # 1. Fetch the review object
     review = get_object_or_404(Review, id=id)
-    
+    if review.user == request.user:
     # 2. Save the destination ID so we know where to redirect back to
     # (Assumes your Review model has a foreign key to Destination, adjust field name if necessary)
-    destination_id = review.destination.id 
+        destination_id = review.destination.id 
     
     # 3. Delete from database
-    review.delete()
+        review.delete()
+    else:
+        review.user != request.user
+        return Response(status=status.HTTP_404_NOT_FOUND)
+            
     
     # 4. Redirect back to the review page with its required ID argument
     return redirect('review_view', Destination_id=destination_id)
