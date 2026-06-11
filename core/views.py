@@ -136,3 +136,17 @@ class Register_api(APIView):
             }, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+def delete_review(request, id):
+    # 1. Fetch the review object
+    review = get_object_or_404(Review, id=id)
+    
+    # 2. Save the destination ID so we know where to redirect back to
+    # (Assumes your Review model has a foreign key to Destination, adjust field name if necessary)
+    destination_id = review.destination.id 
+    
+    # 3. Delete from database
+    review.delete()
+    
+    # 4. Redirect back to the review page with its required ID argument
+    return redirect('review_view', Destination_id=destination_id)
