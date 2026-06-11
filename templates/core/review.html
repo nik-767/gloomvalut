@@ -31,12 +31,16 @@
                     <div class="review-card mb-3 p-3 border rounded-3">
                         <p class="review-meta mb-1"><strong>{{ review.user }}</strong> rated it: {{ review.rating }}/5</p>
                         <p class="review-text mb-0">"{{ review.comment }}"</p>
-                        <a href="{% url 'Update_view' id=review.id %}">Edit Review</a>                    </div> 
+                        <a href="{% url 'Update_view' id=review.id %}">Edit Review</a>  
+                        <br> 
+                        <a href="{%url 'delete_review' review.id %}" method="POST">delete Review</a>
+                </div> 
                     {% endfor %}
                 {% else %}
                     <p class="text-muted">No reviews yet for this castle.</p>
                 {% endif %}
             </div>
+
 
             <hr>
 
