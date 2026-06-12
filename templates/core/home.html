@@ -56,6 +56,7 @@
                                     <span class="badge rounded-pill bg-secondary">{{ tag.name }}</span>
                                 {% endfor %}
                                 <a href="{% url 'review_view' d.id %}" class="view-review-link">View Review</a>
+                                <a href="{% url 'update_card' d.id %}"class="update-card-link">Update Card</a>
                             </div>
                         </div>
                     </div>
