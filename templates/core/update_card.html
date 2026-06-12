@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Castle - Gloomvault</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'core/styles.css' %}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="auth-card" style="max-width: 600px;">
+            <h3 class="mb-4">Update Castle</h3>
+            <form method="POST" enctype="multipart/form-data" class="auth-form">
+                {% csrf_token %}
+                <label>
+                    Castle Name
+                    <input type="text" name="castle" value="{{ dest.castle }}" placeholder="Enter castle name" required>
+                </label>
+                
+                <label>
+                    Current Image
+                    {% if dest.image %}
+                    <div class="mb-2 text-center">
+                        <img src="{{ dest.image.url }}" alt="{{ dest.castle }}" class="card-img-top rounded" style="max-height: 200px; object-fit: cover; border: 1px solid var(--border-gothic);">
+                    </div>
+                    {% endif %}
+                    <input type="file" name="image">
+                </label>
+                
+                <label>
+                    Country
+                    <input type="text" name="country" value="{{ dest.country }}" placeholder="Enter country" required>
+                </label>
+                
+                <label>
+                    Description
+                    <textarea name="description" placeholder="Enter description" rows="3" required>{{ dest.description }}</textarea>
+                </label>
+                
+                <label>
+                    Atmosphere Rating
+                    <input type="number" step="0.1" name="atmosphere" value="{{ dest.atmosphere }}" placeholder="e.g. 4.5" required>
+                </label>
+                
+                <button type="submit" class="btn mt-2">Update Castle</button>
+            </form>
+            
+            <div class="navigation-links" style="margin-top: 24px; text-align: center;">
+                <a href="{% url 'home' %}" class="back-home-btn">Cancel and Go Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
