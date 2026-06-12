@@ -159,3 +159,22 @@ def delete_review(request, id):
     
     # 4. Redirect back to the review page with its required ID argument
     return redirect('review_view', Destination_id=destination_id)
+
+def Update_castle(request, id):
+    data = get_object_or_404(Destination, id=id)
+
+    if request.method == "POST":
+        data.castle = request.POST.get('castle')
+        data.country = request.POST.get('country')
+        data.description = request.POST.get('description')
+        if request.FILES.get('image'):
+            data.image = request.FILES.get('image')
+        data.atmosphere = request.POST.get('atmosphere')
+
+        data.save()
+
+        return redirect('home')
+    
+    return render(request, 'core/update_card.html', {'dest': data})
+    
+    
