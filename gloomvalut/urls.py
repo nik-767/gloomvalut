@@ -40,6 +40,7 @@ urlpatterns = [
     path('review/<int:Destination_id>/', review_view, name='review_view'),
     path('delete/<int:id>/', views.delete_review, name='delete_review'),
     path('review/<int:id>/update.html', Update_view, name='Update_view'),
+    path('update/<int:id>/', views.Update_castle, name='update_card'),
     path('api/register/',Register_api.as_view(), name='auth_register'),
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
