@@ -176,5 +176,13 @@ def Update_castle(request, id):
         return redirect('home')
     
     return render(request, 'core/update_card.html', {'dest': data})
+
+def delete_castle(request, id):
+    delete_data = get_object_or_404(Destination , id=id)
     
+
+    delete_data.delete()
+
+    return redirect('home')
+
     
