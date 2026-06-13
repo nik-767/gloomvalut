@@ -57,6 +57,7 @@
                                 {% endfor %}
                                 <a href="{% url 'review_view' d.id %}" class="view-review-link">View Review</a>
                                 <a href="{% url 'update_card' d.id %}"class="update-card-link">Update Card</a>
+                                <a href="{% url 'delete_castle' d.id %}">Delete card</a>
                             </div>
                         </div>
                     </div>
