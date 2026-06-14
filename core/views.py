@@ -1,10 +1,11 @@
 from django.shortcuts import render , redirect 
 from .models import *
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout 
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from rest_framework.views import APIView , Response
+from rest_framework.views import APIView , Response 
 from rest_framework import viewsets , status
 from .serializer import gloomvalutseralizer , Registerseralizer , loginseralizer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -77,20 +78,26 @@ def login_view(request):
     return render(request, 'core/login.html', {'error': error})
     
 
-def review_view(request , Destination_id ):
-    watching = get_object_or_404(Destination, id=Destination_id)
-
+def review_view(request , Destination_id):
+    watching = get_object_or_404(Destination, id=Destination_id )
+    rev = Review.objects.filter(user=request.user, destination=watching)
     if request.method == "POST":
+        if rev.exists():
+            return HttpResponse("review already exist")
+
         rating = request.POST.get("rating")
         comment = request.POST.get("comment")
 
         adding = Review(
-            comment = comment,
-            rating = rating,
-            user=request.user,          # The currently logged-in user
-            destination=watching 
+        comment = comment,
+        rating = rating,
+        user=request.user,          # The currently logged-in user
+        destination=watching 
         )
         adding.save()
+        return render(request, 'core/review.html', {'watching': watching}) # Save hone ke baad ka response
+
+
 
     return render(request, 'core/review.html', {'watching': watching})
 
