@@ -10,38 +10,47 @@ from rest_framework import viewsets , status
 from .serializer import gloomvalutseralizer , Registerseralizer , loginseralizer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
+from django.db.models import Avg  
 
 # Create your views here.
 
+from django.shortcuts import render, redirect
+from django.db.models import Avg
+from .models import Destination
+
 def home(request):
+    # 1. Agar user form submit kare (POST Request)
     if request.method == "POST":
         castle = request.POST.get("castle")
         country = request.POST.get("country")
         description = request.POST.get("description")
         image = request.FILES.get("image")
         atmosphere = request.POST.get("atmosphere")
-
+        
+        # Naya castle object banaya aur save kiya
         add_dest = Destination(
             country=country,
             castle=castle,
             atmosphere=atmosphere,
             description=description,
-            image=image
+            image=image,
         )
         add_dest.save()
-        return redirect('home')
+        return redirect('home') # Refresh bug se bachne ke liye redirect
     
+    # 2. Page par data dikhane ka logic (GET Request)
     search = request.GET.get("castle")
+    
     if search:
-        dest = Destination.objects.filter(
-            castle__icontains = search
-        )
+        # Agar search kiya, toh filtered data dikhao (Bina rating ke)
+        dest = Destination.objects.filter(castle__icontains=search)
     else:
-        dest = Destination.objects.all()
+        # Agar search nahi kiya, toh saare castles par live Avg Rating chipkao
+        dest = Destination.objects.annotate(Avg_rate=Avg('review__rating'))
 
-
-
+    # Final response: Data ko HTML template par bhej diya
     return render(request, "core/home.html", {"dest": dest})
+
 
 def Register(request):
     if request.method == "POST":  # 1. Did the user click 'Submit' on the register form?
@@ -78,27 +87,42 @@ def login_view(request):
     return render(request, 'core/login.html', {'error': error})
     
 
-def review_view(request , Destination_id):
-    watching = get_object_or_404(Destination, id=Destination_id )
+def review_view(request, Destination_id):
+    # 1. URL se aayi hui ID ke hisab se database se Destination (Castle/Jaga) nikaalo. Agar nahi mili toh 404 error de do.
+    watching = get_object_or_404(Destination, id=Destination_id)
+    
+    # 2. Database mein check karo ki kya IS current user ne IS specific destination par pehle se koi review diya hai.
     rev = Review.objects.filter(user=request.user, destination=watching)
+    
+    # 3. Agar user ne form submit kiya hai (Submit button dabane par POST request aati hai)
     if request.method == "POST":
+        
+        # 4. Agar upar lagaya hua filter sach ho gaya (matlab review pehle se database mein mil gaya)
         if rev.exists():
+            # 5. User ko aage badhne se rok do aur screen par error message dikha do
             return HttpResponse("review already exist")
 
+        # 6. Agar pehle se review nahi hai, toh form se bheji gayi rating aur comment ko utha lo
         rating = request.POST.get("rating")
         comment = request.POST.get("comment")
 
+        # 7. Review model ka ek naya object banao aur usmein saara data fill (map) kar do
         adding = Review(
-        comment = comment,
-        rating = rating,
-        user=request.user,          # The currently logged-in user
-        destination=watching 
+            comment=comment,
+            rating=rating,
+            user=request.user,          # Jisne login kiya hua hai
+            destination=watching         # Jis destination ka page khula hai
         )
+        
+        # 8. Is naye review data ko database ke andar hamesha ke liye save kar do
         adding.save()
-        return render(request, 'core/review.html', {'watching': watching}) # Save hone ke baad ka response
+        
+        # 9. [PRG Pattern]: Save karne ke baad user ko dobara ISI page ke URL par redirect (bhej) do.
+        # Isse user agar page refresh (F5) karega, toh duplicate review submit nahi hoga.
+        return redirect('review_view', Destination_id=Destination_id)
 
-
-
+    # 10. Agar request POST nahi hai (matlab user ne sirf pehli baar page khola hai - GET request)
+    # Toh chupchap user ko 'review.html' ka web page load karke dikha do.
     return render(request, 'core/review.html', {'watching': watching})
 
 def Update_view(request, id):

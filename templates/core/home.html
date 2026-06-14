@@ -35,6 +35,13 @@
                             <h2 class="destination-card-title h4">{{ d.castle }}</h2>
                             <p class="destination-card-subtitle mb-3">{{ d.country }}</p>
                             <p class="destination-card-text mb-3">{{ d.description }}</p>
+<!-- html template ke andar card mein jahan ratings dikhani hai wahan ye likhein -->
+{% if d.Avg_rate %}
+    <p style="color: #ffc107; font-weight: bold;">Average Rating: {{ d.Avg_rate|floatformat:1 }} ⭐</p>
+{% else %}
+    <p style="color: #666; font-style: italic;">No ratings yet</p>
+{% endif %}
+                            
                         </div>
 
                         {% if d.review_set.all %}

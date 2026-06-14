@@ -29,7 +29,7 @@
                 {% if watching.review_set.all %}
                     {% for review in watching.review_set.all %}
                     <div class="review-card mb-3 p-3 border rounded-3">
-                        <p class="review-meta mb-1"><strong>{{ review.user }}</strong> rated it: {{ review.rating }}/5</p>
+                        <p class="review-meta mb-1"><strong>{{ review.user }}</strong> rated it: {{ review.rating }}/10</p>
                         <p class="review-text mb-0">"{{ review.comment }}"</p>
                         <a href="{% url 'Update_view' id=review.id %}">Edit Review</a>  
                         <br> 
