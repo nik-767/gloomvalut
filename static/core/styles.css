@@ -535,3 +535,175 @@ body {
     text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
 }
 
+/* Profile specific CSS extending the Gloomvault design system */
+.profile-card {
+    width: 100%;
+    max-width: 500px;
+    padding: 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-gothic);
+    border-radius: 8px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 
+                inset 0 0 30px rgba(136, 19, 55, 0.15);
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInCard 0.8s ease-out;
+    text-align: center;
+}
+
+.profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(180, 83, 9, 0.1);
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+@keyframes fadeInCard {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.avatar-wrapper {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 24px;
+}
+
+.avatar-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    padding: 6px;
+    background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-crimson) 100%);
+    box-shadow: 0 0 20px rgba(136, 19, 55, 0.4), 0 0 40px rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.avatar-container:hover {
+    transform: scale(1.05) rotate(5deg);
+    box-shadow: 0 0 25px var(--gold-glow), 0 0 50px rgba(225, 29, 72, 0.3);
+    background: linear-gradient(135deg, var(--accent-gold-bright) 0%, var(--accent-crimson-bright) 100%);
+}
+
+.profile-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--bg-surface);
+    background: var(--bg-base);
+    filter: sepia(0.25) contrast(1.1) brightness(0.85);
+    transition: filter 0.3s ease;
+}
+
+.avatar-container:hover .profile-pic {
+    filter: sepia(0) contrast(1) brightness(1);
+}
+
+.placeholder-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid var(--bg-surface);
+    background: radial-gradient(circle, #2d0510 0%, #0c0406 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-gold-bright);
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    font-weight: 700;
+    text-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
+    user-select: none;
+}
+
+.profile-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 4px;
+    letter-spacing: 0.06em;
+    text-shadow: 0 0 15px rgba(225, 29, 72, 0.5);
+    text-transform: capitalize;
+}
+
+.profile-meta {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.meta-dot {
+    width: 4px;
+    height: 4px;
+    background-color: var(--accent-gold);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.profile-bio-section {
+    position: relative;
+    background: rgba(10, 8, 9, 0.5);
+    border: 1px solid rgba(136, 19, 55, 0.15);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+    min-height: 80px;
+}
+
+.profile-bio-section::before {
+    content: '“';
+    position: absolute;
+    top: -10px;
+    left: 14px;
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: rgba(180, 83, 9, 0.25);
+    line-height: 1;
+}
+
+.profile-bio {
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin: 0;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+}
+
+.profile-bio.empty {
+    color: var(--text-muted);
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+

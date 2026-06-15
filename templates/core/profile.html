@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile.user.username|title }}'s Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/styles.css' %}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="auth-card" style="max-width: 600px; text-align: center;">
+            <h1 class="mb-2">{{ profile.user.username|title }}</h1>
+            <p class="subtitle mb-4">User Profile</p>
+
+            {% if profile.pic %}
+                <img src="{{ profile.pic.url }}" alt="{{ profile.user.username }}" class="profile-pic mb-4" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gothic);">
+            {% endif %}
+
+            <div class="bio-section mb-4" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px;">
+                {% if profile.bio %}
+                    <p class="review-text">{{ profile.bio }}</p>
+                {% else %}
+                    <p class="text-muted"><em>No bio available.</em></p>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'home' %}" class="back-home-btn">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
