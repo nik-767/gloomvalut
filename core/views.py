@@ -11,6 +11,7 @@ from .serializer import gloomvalutseralizer , Registerseralizer , loginseralizer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from django.db.models import Avg  
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -48,9 +49,13 @@ def home(request):
         # Agar search nahi kiya, toh saare castles par live Avg Rating chipkao
         dest = Destination.objects.annotate(Avg_rate=Avg('review__rating'))
 
-    # Final response: Data ko HTML template par bhej diya
-    return render(request, "core/home.html", {"dest": dest})
+        paginator = Paginator(dest,5)
+     # 3. URL se current page number nikaalo.
+    # Agar URL `?page=2` hai, toh 'page_number' ki value 2 ho jayegi. Agar URL mein kuch nahi hai, toh yeh None hoga.
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
+    return render(request, "core/home.html",{"page_obj" : page_obj, "search":search})
 
 def Register(request):
     if request.method == "POST":  # 1. Did the user click 'Submit' on the register form?
@@ -216,4 +221,3 @@ def delete_castle(request, id):
 
     return redirect('home')
 
-    
