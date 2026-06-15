@@ -30,3 +30,13 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True)
+    pic = models.ImageField(upload_to="images/")
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        # Isse aap admin panel mein direct username dekh payenge
+        return f"{self.user.username}'s Profile"
