@@ -1,6 +1,6 @@
 from django.shortcuts import render , redirect 
 from .models import *
-from django.http import HttpResponse
+from django.http import HttpResponse , HttpResponseForbidden
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout 
 from django.shortcuts import get_object_or_404
@@ -12,6 +12,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from django.db.models import Avg  
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -19,6 +20,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Avg
 from .models import Destination
 
+@login_required
 def home(request):
     # 1. Agar user form submit kare (POST Request)
     if request.method == "POST":
@@ -49,9 +51,7 @@ def home(request):
         # Agar search nahi kiya, toh saare castles par live Avg Rating chipkao
         dest = Destination.objects.annotate(Avg_rate=Avg('review__rating'))
 
-        paginator = Paginator(dest,5)
-     # 3. URL se current page number nikaalo.
-    # Agar URL `?page=2` hai, toh 'page_number' ki value 2 ho jayegi. Agar URL mein kuch nahi hai, toh yeh None hoga.
+    paginator = Paginator(dest,5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
@@ -69,11 +69,13 @@ def Register(request):
             username=username,
             password=password
         )
+        Profile.objects.create(user=user)
         
         return redirect('login')  # 5. Send them straight to the login page
     
     return render(request, "core/register.html")  # 6. If they just arrived (GET), show them the blank signup form
 
+@login_required
 def login_view(request):
 
     error = None
@@ -130,21 +132,24 @@ def review_view(request, Destination_id):
     # Toh chupchap user ko 'review.html' ka web page load karke dikha do.
     return render(request, 'core/review.html', {'watching': watching})
 
+@login_required
 def Update_view(request, id):
     update = get_object_or_404(Review, id=id)
-    if update.user == request.user: 
-        if request.method == "POST":
-            update.comment = request.POST.get('comment')
-            update.rating = request.POST.get('rating')
-
-            update.save()
-    
-            return redirect('review_view' ,Destination_id=update.destination_id)
-    else:
-        update.user != request.user
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    return render(request, 'update.html', {'update': update})
+ 
+    # FIX 3: was "else: update.user != request.user" which does nothing
+    # and "return Response()" which crashes in a regular view
+    if update.user != request.user:
+        return HttpResponseForbidden("You can only edit your own reviews.")
+ 
+    if request.method == "POST":
+        update.comment = request.POST.get('comment')
+        update.rating  = request.POST.get('rating')
+        update.save()
+        return redirect('review_view', Destination_id=update.destination_id)
+ 
+    # FIX 4: was 'update.html' — missing core/ prefix
+    return render(request, 'core/update.html', {'update': update})
+ 
 
     
 
@@ -178,6 +183,7 @@ class Register_api(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+@login_required
 def delete_review(request, id):
     # 1. Fetch the review object
     review = get_object_or_404(Review, id=id)
@@ -196,6 +202,7 @@ def delete_review(request, id):
     # 4. Redirect back to the review page with its required ID argument
     return redirect('review_view', Destination_id=destination_id)
 
+@login_required
 def Update_castle(request, id):
     data = get_object_or_404(Destination, id=id)
 
@@ -221,3 +228,11 @@ def delete_castle(request, id):
 
     return redirect('home')
 
+def Profiles(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    return render(
+        request,
+        "core/profile.html",
+        {"profile": profile}
+    )
