@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile - {{ profile.user.username }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/styles.css' %}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="auth-card" style="max-width: 600px;">
+            <h1 class="profile-title">Update Profile</h1>
+            <form method="post" enctype="multipart/form-data" class="auth-form">
+                {% csrf_token %}
+                <label>
+                    Bio
+                    <textarea name="bio" placeholder="Tell us about yourself..." rows="4">{{ profile.bio }}</textarea>
+                </label>
+
+                <label>
+                    Profile Picture
+                    {% if profile.pic %}
+                    <div class="avatar-wrapper mb-3">
+                        <div class="avatar-container" style="width: 100px; height: 100px; margin: 0 auto;">
+                            <img src="{{ profile.pic.url }}" class="profile-pic">
+                        </div>
+                    </div>
+                    {% endif %}
+                    <input type="file" name="pic">
+                </label>
+                
+                <button type="submit" class="btn">Update Profile</button>
+            </form>
+            <div class="navigation-links" style="margin-top: 24px; text-align: center;">
+                <a href="{% url 'profile' %}" class="back-home-btn">Cancel</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

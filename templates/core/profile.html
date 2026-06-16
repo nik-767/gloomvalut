@@ -9,23 +9,35 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <div class="auth-card" style="max-width: 600px; text-align: center;">
-            <h1 class="mb-2">{{ profile.user.username|title }}</h1>
-            <p class="subtitle mb-4">User Profile</p>
+        <div class="profile-card">
+            <h1 class="profile-title">{{ profile.user.username|title }}</h1>
+            
+            <div class="profile-meta">
+                <span>User Profile</span>
+                <span class="meta-dot"></span>
+                <span>Member since {{ profile.created|date:"M Y" }}</span>
+            </div>
 
-            {% if profile.pic %}
-                <img src="{{ profile.pic.url }}" alt="{{ profile.user.username }}" class="profile-pic mb-4" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gothic);">
-            {% endif %}
-
-            <div class="bio-section mb-4" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px;">
-                {% if profile.bio %}
-                    <p class="review-text">{{ profile.bio }}</p>
-                {% else %}
-                    <p class="text-muted"><em>No bio available.</em></p>
+            <div class="avatar-wrapper">
+                {% if profile.pic %}
+                    <div class="avatar-container">
+                        <img src="{{ profile.pic.url }}" class="profile-pic">
+                    </div>
                 {% endif %}
             </div>
 
-            <a href="{% url 'home' %}" class="back-home-btn">Back to Home</a>
+            <div class="profile-bio-section">
+                {% if profile.bio %}
+                    <p class="profile-bio">{{ profile.bio }}</p>
+                {% else %}
+                    <p class="profile-bio empty">No bio written yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="profile-actions">
+                <a href="{% url 'Profile_upd' %}">update profile</a>
+                <a href="{% url 'home' %}" class="back-home-btn">Back to Home</a>
+            </div>
         </div>
     </div>
 </body>

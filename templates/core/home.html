@@ -14,8 +14,10 @@
         <div class="text-center mb-5 home-hero">
             <h1 class="hero-title display-5 fw-bold">Castle Destinations</h1>
             <p class="text-muted">Explore enchanting castles with memorable atmosphere, region details, and curated tags.</p>
+            <div class="profile-actions mt-3">
+                <a href="{% url 'profile' %}" class="btn btn-primary px-4 py-2">View Profile</a>
+            </div>
         </div>
-        
         <div class="search-container mb-5">
             <form method="get" class="d-flex gap-2 justify-content-center align-items-center">
                 <input type="search" name="castle" class="form-control form-control-lg w-75" placeholder="Search for a castle...">
