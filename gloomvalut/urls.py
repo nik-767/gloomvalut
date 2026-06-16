@@ -43,6 +43,7 @@ urlpatterns = [
     path('update/<int:id>/', views.Update_castle, name='update_card'),
     path('delete_card/<int:id>/', views.delete_castle, name='delete_castle'),
     path('profile/', views.Profiles, name='profile'),
+    path('profile_update', views.Profile_upd, name='Profile_upd'),
     path('api/register/',Register_api.as_view(), name='auth_register'),
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
