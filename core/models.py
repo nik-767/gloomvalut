@@ -3,10 +3,11 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Destination(models.Model):
+    posted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='destinations' )
     castle = models.CharField(max_length=100, unique=True)
     country = models.CharField(max_length=100)
     description = models.TextField()
-    image = models.ImageField(upload_to="images/")
+    image = models.ImageField(upload_to="images/", blank=True, null=True)
     atmosphere = models.FloatField()
 
 
@@ -34,9 +35,10 @@ class Tag(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
-    pic = models.ImageField(upload_to="images/")
+    pic = models.ImageField(upload_to="images/" ,blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         # Isse aap admin panel mein direct username dekh payenge
         return f"{self.user.username}'s Profile"
+
