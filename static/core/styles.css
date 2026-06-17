@@ -149,6 +149,7 @@ body {
 }
 
 .btn {
+    display: inline-block;
     width: 100%;
     padding: 14px 0;
     border: 1px solid var(--accent-gold);
@@ -163,6 +164,8 @@ body {
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
 }
 
 .btn:hover {
@@ -705,5 +708,34 @@ body {
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+/* Delete Card Link styling */
+.delete-card-link {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    color: var(--accent-crimson-bright);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px dashed var(--accent-crimson-bright);
+    transition: all 0.3s ease;
+    margin-left: 12px;
+}
+
+.delete-card-link:hover {
+    color: #fecdd3;
+    border-bottom-style: solid;
+    text-shadow: 0 0 5px var(--primary-glow);
+}
+
+/* Profile Section Title styling */
+.profile-section-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(225, 29, 72, 0.5);
+    letter-spacing: 0.05em;
 }
 
