@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from rest_framework.views import APIView , Response 
 from rest_framework import viewsets , status
-from .serializer import gloomvalutseralizer , Registerseralizer , loginseralizer
+from .serializer import gloomvalutseralizer , Registerseralizer , loginseralizer 
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from django.db.models import Avg  
@@ -30,8 +30,10 @@ def home(request):
         image = request.FILES.get("image")
         atmosphere = request.POST.get("atmosphere")
         
+        
         # Naya castle object banaya aur save kiya
         add_dest = Destination(
+            posted_by=request.user,  # 
             country=country,
             castle=castle,
             atmosphere=atmosphere,
@@ -75,7 +77,6 @@ def Register(request):
     
     return render(request, "core/register.html")  # 6. If they just arrived (GET), show them the blank signup form
 
-@login_required
 def login_view(request):
 
     error = None
@@ -162,10 +163,9 @@ def delete_review(request, id):
     
     # 3. Delete from database
         review.delete()
-    else:
-        review.user != request.user
-        return Response(status=status.HTTP_404_NOT_FOUND)
-            
+        return redirect('review_view', Destination_id=destination_id)
+
+    
     
     # 4. Redirect back to the review page with its required ID argument
     return redirect('review_view', Destination_id=destination_id)
@@ -198,16 +198,19 @@ def delete_castle(request, id):
 
 def Profiles(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
+     # 2. Related Name ('destinations') use karke sirf is logged-in user ke saare posts nikaalein
+    user_posts = request.user.destinations.all()
 
     return render(
         request,
         "core/profile.html",
-        {"profile": profile}
+        {"profile": profile,
+        "user_posts" : user_posts}
     )
 
-
+@login_required
 def Profile_upd(request):
-    update = get_object_or_404(Profile)
+    update = get_object_or_404(Profile, user=request.user)
     if request.method == 'POST':
         update.bio = request.POST.get('bio')
         if request.FILES.get('pic'):
@@ -218,6 +221,7 @@ def Profile_upd(request):
         return redirect('profile')
 
     return render(request,'core/profile_upd.html', {'profile': update} )
+
 
 
 # apis 
@@ -250,4 +254,4 @@ class Register_api(APIView):
             }, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
