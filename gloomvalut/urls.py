@@ -30,7 +30,8 @@ from rest_framework_simplejwt.views import (
 
 router = routers.DefaultRouter()
 router.register(r'gloomvalutview', views.gloomvalutview)
-
+router.register(r'Reviewview', views.Reviewview)
+router.register(r'profileview', views.Profileview)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

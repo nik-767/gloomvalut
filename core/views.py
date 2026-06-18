@@ -7,12 +7,14 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from rest_framework.views import APIView , Response 
 from rest_framework import viewsets , status
-from .serializer import gloomvalutseralizer , Registerseralizer , loginseralizer 
+from .serializer import gloomvalutseralizer , Registerseralizer , loginseralizer , Reviewseralizer , Profileseralizer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from django.db.models import Avg  
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+
 
 # Create your views here.
 
@@ -33,7 +35,7 @@ def home(request):
         
         # Naya castle object banaya aur save kiya
         add_dest = Destination(
-            posted_by=request.user,  # 
+            posted_by=request.user,  # when the user create a destination, it will be linked to that user and saved automatically in the database.
             country=country,
             castle=castle,
             atmosphere=atmosphere,
@@ -53,7 +55,7 @@ def home(request):
         # Agar search nahi kiya, toh saare castles par live Avg Rating chipkao
         dest = Destination.objects.annotate(Avg_rate=Avg('review__rating'))
 
-    paginator = Paginator(dest,5)
+    paginator = Paginator(dest,6)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
@@ -156,19 +158,17 @@ def Update_view(request, id):
 def delete_review(request, id):
     # 1. Fetch the review object
     review = get_object_or_404(Review, id=id)
-    if review.user == request.user:
+    if review.user != request.user:
+        raise PermissionDenied
+    if request.method == "POST":
     # 2. Save the destination ID so we know where to redirect back to
     # (Assumes your Review model has a foreign key to Destination, adjust field name if necessary)
         destination_id = review.destination.id 
-    
     # 3. Delete from database
         review.delete()
         return redirect('review_view', Destination_id=destination_id)
-
-    
-    
-    # 4. Redirect back to the review page with its required ID argument
-    return redirect('review_view', Destination_id=destination_id)
+    # 4. Agar koi direct URL open kare (GET request), to bina delete kiye wapas bhej do
+    return redirect('review_view', Destination_id=review.destination_id)
 
 @login_required
 def Update_castle(request, id):
@@ -196,10 +196,11 @@ def delete_castle(request, id):
 
     return redirect('home')
 
+@login_required
 def Profiles(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
      # 2. Related Name ('destinations') use karke sirf is logged-in user ke saare posts nikaalein
-    user_posts = request.user.destinations.all()
+    user_posts = request.user.destinations.all() #Give me all destinations created by this user.
 
     return render(
         request,
@@ -255,3 +256,10 @@ class Register_api(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class Reviewview(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = Reviewseralizer
+
+class Profileview(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = Profileseralizer

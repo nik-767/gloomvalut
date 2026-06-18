@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Destination
+from .models import Destination , Review , Profile
 from django.contrib.auth.models import User
 
 class gloomvalutseralizer(serializers.ModelSerializer):
@@ -27,3 +27,13 @@ class Registerseralizer(serializers.ModelSerializer):
 class loginseralizer(serializers.Serializer):
     username = serializers.CharField(required = True)
     password = serializers.CharField(required = True, write_only= True)
+
+class Reviewseralizer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = "__all__"
+    
+class Profileseralizer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = "__all__"

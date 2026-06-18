@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Destination(models.Model):
+    # with this evey destination now has a user who posted it, and if the user is deleted, the destination will remain but the posted_by field will be set to null.
     posted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='destinations' )
     castle = models.CharField(max_length=100, unique=True)
     country = models.CharField(max_length=100)
