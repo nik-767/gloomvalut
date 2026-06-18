@@ -14,6 +14,10 @@ from django.db.models import Avg
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+
+
 
 
 # Create your views here.
@@ -251,7 +255,7 @@ class Register_api(APIView):
             tokens = genrate_token(user)
             return Response({
                 "message" : "register successfully",
-                "tokens" : tokens
+                "tokens" : tokens,
             }, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -260,6 +264,34 @@ class Reviewview(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = Reviewseralizer
 
-class Profileview(viewsets.ModelViewSet):
+class Profileview(viewsets.ViewSet):
     queryset = Profile.objects.all()
     serializer_class = Profileseralizer
+    
+class ReviewAPI(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, destination_id):
+        queryset = Review.objects.filter(destination_id=destination_id) #Aapne URL se aayi hui destination_id uthayi. Database mein filter chalakar us specific destination ke saare reviews nikaal liye. Yeh aapko ek Django Queryset (list of objects) dega.
+        serializer = Reviewseralizer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request , destination_id):
+        already_exist = Review.objects.filter(
+            user = request.user,
+            destination_id = destination_id
+        ).exists()
+        if already_exist :
+            return Response(
+            {"error": "review already exist"}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+        else:
+            serializer = Reviewseralizer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(user=request.user, destination_id=destination_id)
+                return Response(
+                    serializer.data , status=status.HTTP_201_CREATED
+                )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
