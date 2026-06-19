@@ -43,3 +43,6 @@ class Profile(models.Model):
         # Isse aap admin panel mein direct username dekh payenge
         return f"{self.user.username}'s Profile"
 
+class Follow(models.Model):
+    followers = models.ForeignKey(User , related_name="following", on_delete=models.CASCADE)
+    following = models.ForeignKey(User, related_name="follows" , on_delete=models.CASCADE)

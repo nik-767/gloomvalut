@@ -227,6 +227,12 @@ def Profile_upd(request):
 
     return render(request,'core/profile_upd.html', {'profile': update} )
 
+def Follows(request, user_id):
+    data = get_object_or_404(User, user_id)
+    if request.user == 
+
+
+
 
 
 # apis 
