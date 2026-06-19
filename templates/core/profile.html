@@ -124,5 +124,9 @@
             </div>
         </div>
     </div>
+    <form method="POST" action="{% url 'follow' data.id %}">
+    {% csrf_token %}
+    <button type="submit">Follow</button>
+</form>
 </body>
 </html>

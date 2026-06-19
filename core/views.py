@@ -227,12 +227,27 @@ def Profile_upd(request):
 
     return render(request,'core/profile_upd.html', {'profile': update} )
 
-def Follows(request, user_id):
-    data = get_object_or_404(User, user_id)
-    if request.user == 
+@login_required
+def Follows(request,  user_id):
+    data = get_object_or_404(User, id =user_id)
+    if data == request.user:
+        raise PermissionDenied
+    if request.method == "POST":
+            already = Follow.objects.filter(
+            followers = request.user,
+            following= data
+    )
+            if already.exists():
+                already.delete()
+            else:
+                new_follow = Follow.objects.create(
+                followers=request.user,
+                following=data
+            )
+            
+    return redirect('profile')
 
-
-
+    
 
 
 # apis 
