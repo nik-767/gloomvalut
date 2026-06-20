@@ -41,6 +41,12 @@
                 </div>
 
                 <div class="profile-actions">
+                    {% if profile.user %}
+<form method="POST" action="{% url 'follow' profile.user.id %}">
+    {% csrf_token %}
+    <button type="submit">Follow</button>
+</form>
+{% endif %}
                     <a href="{% url 'Profile_upd' %}" class="btn">update profile</a>
                     <a href="{% url 'home' %}" class="back-home-btn">Back to Home</a>
                 </div>
@@ -124,9 +130,6 @@
             </div>
         </div>
     </div>
-    <form method="POST" action="{% url 'follow' data.id %}">
-    {% csrf_token %}
-    <button type="submit">Follow</button>
-</form>
+    
 </body>
 </html>
