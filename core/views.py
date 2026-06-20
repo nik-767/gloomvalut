@@ -227,27 +227,32 @@ def Profile_upd(request):
 
     return render(request,'core/profile_upd.html', {'profile': update} )
 
-@login_required
+@login_required  # Sirf logged-in users ke liye
 def Follows(request,  user_id):
-    data = get_object_or_404(User, id =user_id)
+    data = get_object_or_404(User, id =user_id)  # Target user ko database se nikala
     if data == request.user:
-        raise PermissionDenied
-    if request.method == "POST":
+        raise PermissionDenied  # Khud ko follow karne se roka
+    if request.method == "POST":  # Sirf button click (POST) par chalega
             already = Follow.objects.filter(
             followers = request.user,
             following= data
-    )
+    )  # Check kiya rishta pehle se hai ya nahi
             if already.exists():
-                already.delete()
+                already.delete()  # Pehle se hai toh Unfollow (Delete) kiya
             else:
                 new_follow = Follow.objects.create(
                 followers=request.user,
                 following=data
-            )
+            )  # Nahi hai toh Naya Follow (Create) kiya
             
-    return redirect('profile')
+    return redirect('home')  # Wapas profile page par bheja
 
-    
+
+def Public_profile(request, user_id): # USER_ID USE FOR  jis user k profile dekhna h uski id
+    data = get_object_or_404(Profile,user_id=user_id)
+    data2 = data.user.destinations.all()
+    return render(request,'core/profile.html', {'profile': data,      # 'data' nahi, 'profile' bhejo
+    'user_posts': data2})   # 'data2' nahi, 'user_posts' bhejo)
 
 
 # apis 
