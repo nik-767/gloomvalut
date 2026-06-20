@@ -46,6 +46,7 @@ urlpatterns = [
     path('profile/', views.Profiles, name='profile'),
     path('profile_update', views.Profile_upd, name='Profile_upd'),
     path('follow/<int:user_id>/', views.Follows, name='follow'),
+    path('profile_view/<int:user_id>/', views.Public_profile, name='public_profile'),
     path('api/register/',Register_api.as_view(), name='auth_register'),
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
