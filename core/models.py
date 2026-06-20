@@ -46,3 +46,7 @@ class Profile(models.Model):
 class Follow(models.Model):
     followers = models.ForeignKey(User , related_name="following", on_delete=models.CASCADE)
     following = models.ForeignKey(User, related_name="follows" , on_delete=models.CASCADE)
+
+    def __str__(self):
+
+        return f"{self.followers.username, self.following.username}"
