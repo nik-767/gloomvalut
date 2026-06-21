@@ -203,7 +203,7 @@ def delete_castle(request, id):
 @login_required
 def Profiles(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
-     # 2. Related Name ('destinations') use karke sirf is logged-in user ke saare posts nikaalein
+    # 2. Related Name ('destinations') use karke sirf is logged-in user ke saare posts nikaalein
     user_posts = request.user.destinations.all() #Give me all destinations created by this user.
 
     return render(
@@ -245,14 +245,20 @@ def Follows(request,  user_id):
                 following=data
             )  # Nahi hai toh Naya Follow (Create) kiya
             
-    return redirect('home')  # Wapas profile page par bheja
+    return redirect('public_profile', user_id=user_id)  # Wapas profile page par bheja
 
 
 def Public_profile(request, user_id): # USER_ID USE FOR  jis user k profile dekhna h uski id
     data = get_object_or_404(Profile,user_id=user_id)
     data2 = data.user.destinations.all()
-    return render(request,'core/profile.html', {'profile': data,      # 'data' nahi, 'profile' bhejo
-    'user_posts': data2})   # 'data2' nahi, 'user_posts' bhejo)
+    is_following = False
+    if request.user.is_authenticated:
+        is_following = Follow.objects.filter(followers=request.user, following=data.user).exists()
+    return render(request,'core/profile.html', {
+        'profile': data,
+        'user_posts': data2,
+        'is_following': is_following
+    })
 
 
 # apis 
