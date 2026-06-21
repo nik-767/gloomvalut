@@ -49,4 +49,4 @@ class Follow(models.Model):
 
     def __str__(self):
 
-        return f"{self.followers.username, self.following.username}"
+        return f"{self.followers.username} follows {self.following.username}"
