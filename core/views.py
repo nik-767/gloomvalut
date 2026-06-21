@@ -251,13 +251,17 @@ def Follows(request,  user_id):
 def Public_profile(request, user_id): # USER_ID USE FOR  jis user k profile dekhna h uski id
     data = get_object_or_404(Profile,user_id=user_id)
     data2 = data.user.destinations.all()
+    followers_count = Follow.objects.filter(followers=data.user).count()
+    following_count = Follow.objects.filter(following=data.user).count()
     is_following = False
     if request.user.is_authenticated:
         is_following = Follow.objects.filter(followers=request.user, following=data.user).exists()
     return render(request,'core/profile.html', {
         'profile': data,
         'user_posts': data2,
-        'is_following': is_following
+        'is_following': is_following,
+        'followers_count': followers_count,
+        'following_count':following_count
     })
 
 

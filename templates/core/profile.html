@@ -36,6 +36,14 @@
                     </div>
                 {% endif %}
             </div>
+            <div class="profile-follow-counts">
+                <span class="followers-count">
+                    {{ followers_count }} Following
+                </span>
+                <span class="following-count">
+                    {{  following_count }} Followers
+                </span>
+            </div>
 
             <div class="profile-bio-section">
                 {% if profile.bio %}
