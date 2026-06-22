@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'core/styles.css' %}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <main class="container py-4">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 destination-list">
+            {% for d in data2 %}
+            <div class="col">
+                <article class="destination-card card h-100">
+                    {% if d.image %}
+                    <img src="{{ d.image.url }}" alt="{{ d.castle }}" class="card-img-top">
+                    {% endif %}
+                    <div class="card-body destination-card-body d-flex flex-column">
+                        <div>
+                            <h2 class="destination-card-title h4">{{ d.castle }}</h2>
+                            <p class="destination-card-author mb-2">
+                                <span class="text-muted-gothic">By: </span>
+                                {% if d.posted_by %}
+                                    <a href="{% url 'public_profile' d.posted_by.id %}" class="author-link">{{ d.posted_by.username }}</a>
+                                {% else %}
+                                    <span class="author-unknown">Unknown</span>
+                                {% endif %}
+                            </p>
+                            <p class="destination-card-subtitle mb-3">{{ d.country }}</p>
+                            <p class="destination-card-text mb-3">{{ d.description }}</p>
+                            {% if d.Avg_rate %}
+                                <p class="average-rating-stars mb-3">Average Rating: {{ d.Avg_rate|floatformat:1 }} ⭐</p>
+                            {% else %}
+                                <p class="average-rating-none mb-3">No ratings yet</p>
+                            {% endif %}
+                            
+                        </div>
+
+                        {% if d.review_set.all %}
+                        <div class="review-section mb-3">
+                            <h6 class="review-title">Reviews</h6>
+                            {% for review in d.review_set.all %}
+                            <div class="review-card mb-2 p-3 rounded-3">
+                                <p class="review-text mb-1">{{ review.comment }}</p>
+                                <p class="review-meta mb-0">Rating: {{ review.rating }} · User: {{ review.user }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="mt-auto">
+                            <p class="destination-card-text mb-2"><strong>Atmosphere:</strong> {{ d.atmosphere }}</p>
+                            <div class="destination-card-meta d-flex flex-wrap align-items-center gap-2 mt-2">
+                                {% for tag in d.tags.all %}
+                                    <span class="badge rounded-pill bg-secondary">{{ tag.name }}</span>
+                                {% endfor %}
+                                <div class="card-action-links d-flex gap-3 align-items-center w-100 mt-2">
+                                    <a href="{% url 'review_view' d.id %}" class="view-review-link">View Review</a>
+                                    <a href="{% url 'update_card' d.id %}" class="update-card-link">Update Card</a>
+                                    <a href="{% url 'delete_castle' d.id %}" class="delete-card-link">Delete Card</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>
