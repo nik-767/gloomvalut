@@ -264,6 +264,13 @@ def Public_profile(request, user_id): # USER_ID USE FOR  jis user k profile dekh
         'following_count':following_count
     })
 
+@login_required
+def Feed(request):
+    data = Follow.objects.filter(followers=request.user).values_list('following', flat=True)
+    data2 = Destination.objects.filter( posted_by_id__in=data).order_by('-id')
+    return render(request,'core/feed.html', {'data':data , 'data2':data2})
+
+
 
 # apis 
 class gloomvalutview(viewsets.ModelViewSet):
