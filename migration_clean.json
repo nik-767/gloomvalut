@@ -1,0 +1,692 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$IekqfIFMP1CByb8Sl1SDd4$k1TiwtFCHpAGD+7Cv+tvGD4DUpkjdBjGdTUK8MqkzHM=",
+    "last_login": "2026-05-30T09:26:59.954Z",
+    "is_superuser": true,
+    "username": "nikhil",
+    "first_name": "",
+    "last_name": "",
+    "email": "nikhilkalra124421@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-05-26T09:17:14.689Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$LQC9wXgrl6UPhbVKLKpg4T$ba060eGx30UI4ae8EgbWgk/gLOvvv4rMks0Lgy6roVg=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "ivvy",
+    "first_name": "",
+    "last_name": "",
+    "email": "ivvy@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-05-26T10:25:43.997Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$DqiY30VCa01sECzB9kUbnT$BTvz2tea2EDy/JfOYD6fGh5Oui1cDFrwMevgifvyFZY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "aaja",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-30T11:05:48.790Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$3lLCH13HbwwUTsKIOPnq5a$nZlzXCTm8N6mgfGMzEFmpMsevxD4BFyAmaDMG+EGgnA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "anubhav",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T08:56:03.190Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$hy7BBNYRnpKOmsZHIaF0WN$mENeigs4e9dW2IDKoF7FyaSt6/6JRV75GLdzR8zybHQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "nik",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T08:57:42.324Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$Nx0Bi80j90gntKEpNyDTuK$b6zJdH4PabFEj8otZ7KWBfNZAE2Ef9ftqIDhQEr0oG4=",
+    "last_login": "2026-06-21T06:41:09.047Z",
+    "is_superuser": false,
+    "username": "user10",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T08:59:15.013Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$rqgofXY7bvTh66jkPBKa8Y$hSCM3uYQW3qzAwEIzHfcHTCk8YQq3FA8d+tBxZNbg1Y=",
+    "last_login": "2026-06-10T10:47:49.520Z",
+    "is_superuser": false,
+    "username": "nikhil_kalra",
+    "first_name": "",
+    "last_name": "",
+    "email": "nikhil@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-10T10:43:47.840Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$Z8xdlE1f2BxXMlDzWL29GQ$/G5EGqCDvFY+SSnl/V4eBtm0a65rj8M+g9h9nz++tkg=",
+    "last_login": "2026-06-11T08:36:46.348Z",
+    "is_superuser": false,
+    "username": "ivvy1",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-11T08:36:35.955Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$NUIUyfBtFnoEM1Hypl2JaY$qNXLtMlkkd4hXu8LN+sr6qlZxCubilixIaRS3QoUqOo=",
+    "last_login": "2026-06-21T05:30:31.917Z",
+    "is_superuser": false,
+    "username": "nikki",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-15T16:24:28.121Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 2,
+  "fields": {
+    "posted_by": null,
+    "castle": "Blackwood Abbey",
+    "country": "Scotland",
+    "description": "An abandoned stone abbey hidden deep within the Scottish Highlands. Best visited during cloudy evenings and rainy weather.",
+    "image": "core/images_1.jfif",
+    "atmosphere": 8.9,
+    "tags": [
+      4
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 3,
+  "fields": {
+    "posted_by": null,
+    "castle": "Silent Hill Manor",
+    "country": "japan",
+    "description": "A mysterious manor surrounded by endless mist and empty streets. The location carries a strong 90s horror aesthetic.",
+    "image": "core/Himeji_Castle_The_Keep_Towers.jpg",
+    "atmosphere": 9.2,
+    "tags": [
+      5
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 4,
+  "fields": {
+    "posted_by": null,
+    "castle": "Raven Keep",
+    "country": "germany",
+    "description": "A towering gothic fortress overlooking dark forests and cold rivers. Known for its haunting architecture and stormy skies.",
+    "image": "core/images_2.jfif",
+    "atmosphere": 3.5,
+    "tags": [
+      6
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 5,
+  "fields": {
+    "posted_by": null,
+    "castle": "Ashmoor Fortress",
+    "country": "island",
+    "description": "A lonely fortress located near cliffs and rough seas. The atmosphere becomes especially beautiful during rainy nights.",
+    "image": "core/images_3.jfif",
+    "atmosphere": 3.0,
+    "tags": []
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 6,
+  "fields": {
+    "posted_by": null,
+    "castle": "Bodiam Castle",
+    "country": "england UK",
+    "description": "Built in 1385, Bodiam Castle in East Sussex, England, is surrounded by a water-filled moat.",
+    "image": "images/Bodiam-castle-10My8-1197.jpg",
+    "atmosphere": 3.6,
+    "tags": []
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 7,
+  "fields": {
+    "posted_by": null,
+    "castle": "Neuschwanstein Castle",
+    "country": "Germany",
+    "description": "A nineteenth-century Romanesque Revival palace on a rugged hill above the village of Hohenschwangau in southwest Bavaria, Germany.",
+    "image": "images/neuschwanstein.png",
+    "atmosphere": 4.9,
+    "tags": [
+      7,
+      8,
+      9
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 8,
+  "fields": {
+    "posted_by": null,
+    "castle": "Eilean Donan Castle",
+    "country": "Scotland",
+    "description": "A picturesque castle situated on a small tidal island where three sea lochs meet in the western Highlands of Scotland.",
+    "image": "images/eilean_donan.png",
+    "atmosphere": 4.8,
+    "tags": [
+      7,
+      8,
+      10
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 9,
+  "fields": {
+    "posted_by": null,
+    "castle": "Chillon Castle",
+    "country": "Switzerland",
+    "description": "An island castle located on the shore of Lake Geneva, in the commune of Veytaux, at the eastern end of the lake.",
+    "image": "images/chillon.png",
+    "atmosphere": 4.7,
+    "tags": [
+      7,
+      8,
+      10
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 10,
+  "fields": {
+    "posted_by": null,
+    "castle": "Castell Conwy",
+    "country": "wales",
+    "description": "King Edward I ordered the construction of Conwy Castle in 1283 as a way to widen his defenses as he aimed to conquer and control North Wales. Built by architect James of St. George, the fortress features high curtain walls and eight towers, which remain more than 700 years later and look as though they are a natural extension of the region’s rocky ridges. While many of the intricate details of the castle were destroyed over time, visitors can still explore the interior rooms, spiral staircases, and the full circuit of the town walls.",
+    "image": "images/download.png",
+    "atmosphere": 7.9,
+    "tags": [
+      1
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 12,
+  "fields": {
+    "posted_by": null,
+    "castle": "Bran Castle",
+    "country": "Romania",
+    "description": "Known as Dracula's Castle, a dramatic fortress perched on a rocky cliff in Transylvania, shrouded in mist and legend.",
+    "image": "images/bran_castle.png",
+    "atmosphere": 9.5,
+    "tags": [
+      1,
+      7,
+      8
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 13,
+  "fields": {
+    "posted_by": null,
+    "castle": "Himeji Castle",
+    "country": "Japan",
+    "description": "The White Heron Castle, a stunning timber structure surviving from feudal Japan, standing elegantly above cherry blossoms.",
+    "image": "images/himeji_castle.png",
+    "atmosphere": 9.0,
+    "tags": [
+      5,
+      7,
+      8
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 14,
+  "fields": {
+    "posted_by": null,
+    "castle": "Mont-Saint-Michel",
+    "country": "France",
+    "description": "A gravity-defying medieval abbey-castle built on a tidal island, cut off from the mainland at high tide under stormy skies.",
+    "image": "images/mont_saint_michel.png",
+    "atmosphere": 9.6,
+    "tags": [
+      3,
+      7,
+      8,
+      10
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 15,
+  "fields": {
+    "posted_by": null,
+    "castle": "Corvin Castle",
+    "country": "Romania",
+    "description": "A colossal gothic-renaissance fortress with imposing towers, drawbridges, and deep dungeons, embodying dark fantasy.",
+    "image": "images/corvin_castle.png",
+    "atmosphere": 9.3,
+    "tags": [
+      1,
+      7
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 16,
+  "fields": {
+    "posted_by": null,
+    "castle": "Dunnottar Castle",
+    "country": "Scotland",
+    "description": "A ruined medieval fortress perched on a rocky headland overlooking the North Sea, surrounded by steep cliffs and crashing waves.",
+    "image": "images/dunnottar_castle.png",
+    "atmosphere": 9.1,
+    "tags": [
+      2,
+      7,
+      8
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 17,
+  "fields": {
+    "posted_by": null,
+    "castle": "Alcázar of Segovia",
+    "country": "Spain",
+    "description": "A fairytale castle rising from a rocky crag, resembling the bow of a ship, with distinctive conical roofs and a deep moat.",
+    "image": "images/alcazar_segovia.png",
+    "atmosphere": 8.8,
+    "tags": [
+      5,
+      7,
+      8
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 18,
+  "fields": {
+    "posted_by": null,
+    "castle": "Burg Eltz",
+    "country": "Germany",
+    "description": "A medieval castle nestled deep in a secluded forest hills, untouched by war and preserved in its original enchanting state.",
+    "image": "images/burg_eltz.png",
+    "atmosphere": 9.4,
+    "tags": [
+      3,
+      7,
+      8
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 19,
+  "fields": {
+    "posted_by": null,
+    "castle": "Hohenzollern Castle",
+    "country": "Germany",
+    "description": "A mountaintop ancestral seat appearing to float above the clouds, a neo-Gothic masterpiece of towers and battlements.",
+    "image": "images/hohenzollern_castle.png",
+    "atmosphere": 9.2,
+    "tags": [
+      7,
+      8,
+      9
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 20,
+  "fields": {
+    "posted_by": null,
+    "castle": "Château de Chambord",
+    "country": "France",
+    "description": "A vast French Renaissance palace with an elaborate skyline of chimneys, cupolas, and a double helix staircase designed by Leonardo da Vinci.",
+    "image": "images/chambord.png",
+    "atmosphere": 8.7,
+    "tags": [
+      5,
+      7,
+      8
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 21,
+  "fields": {
+    "posted_by": null,
+    "castle": "Arundel Castle",
+    "country": "England",
+    "description": "A magnificent restored medieval castle situated on a hill in West Sussex, overlooking the River Arun and lush gardens.",
+    "image": "images/arundel.png",
+    "atmosphere": 8.5,
+    "tags": [
+      7,
+      8
+    ]
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 22,
+  "fields": {
+    "posted_by": 6,
+    "castle": "Chenonceau ",
+    "country": "france ",
+    "description": "The Chenonceau Castle is home to an extraordinary museum collection and attracts visitors from all across the globe by offering free visits as well as audio guides in 11 languages. It is known for its beautiful gardens and original floral patterns unique to each room in the castle.",
+    "image": "images/32.webp",
+    "atmosphere": 8.9,
+    "tags": []
+  }
+},
+{
+  "model": "core.destination",
+  "pk": 23,
+  "fields": {
+    "posted_by": 9,
+    "castle": "Lukshmi Vilas",
+    "country": "India",
+    "description": "The royal homes in India are opening their doors and archives, allowing us to take a walk through history itself. In Vadodara, Radhikaraje Gaekwad welcomes us into the sprawling Lukshmi Vilas Palace, while Sawantwadi takes us through a queen's residence that has been transformed into a stunning art hotel inspired by a centuries-old card game. In Jodhpur, Umaid Bhawan still stuns with its Jazz Age glamour, and in Jaipur, Maharaja Padmanabh Singh is quietly restoring long-closed parts of the City Palace, room by room. Take a virtual tour of the most beautiful royal homes in India, as featured in AD India.",
+    "image": "images/Untitled_design_-_2025-08-06T142833.787.webp",
+    "atmosphere": 7.8,
+    "tags": []
+  }
+},
+{
+  "model": "core.review",
+  "pk": 2,
+  "fields": {
+    "comment": "The abandoned ruins and foggy surroundings make this place incredibly eerie and beautiful.",
+    "rating": 10,
+    "user": 2,
+    "destination": 2
+  }
+},
+{
+  "model": "core.review",
+  "pk": 3,
+  "fields": {
+    "comment": "Feels exactly like a forgotten 90s horror game location. Extremely atmospheric.",
+    "rating": 9,
+    "user": 1,
+    "destination": 3
+  }
+},
+{
+  "model": "core.review",
+  "pk": 12,
+  "fields": {
+    "comment": "very good vibe",
+    "rating": 1,
+    "user": 6,
+    "destination": 2
+  }
+},
+{
+  "model": "core.review",
+  "pk": 13,
+  "fields": {
+    "comment": "feel like home",
+    "rating": 8,
+    "user": 6,
+    "destination": 2
+  }
+},
+{
+  "model": "core.review",
+  "pk": 14,
+  "fields": {
+    "comment": "i love japan",
+    "rating": 9,
+    "user": 6,
+    "destination": 3
+  }
+},
+{
+  "model": "core.review",
+  "pk": 15,
+  "fields": {
+    "comment": "so good",
+    "rating": 7,
+    "user": 8,
+    "destination": 4
+  }
+},
+{
+  "model": "core.review",
+  "pk": 16,
+  "fields": {
+    "comment": "very nice",
+    "rating": 5,
+    "user": 6,
+    "destination": 21
+  }
+},
+{
+  "model": "core.review",
+  "pk": 17,
+  "fields": {
+    "comment": "so Disney vibe  ",
+    "rating": 7,
+    "user": 9,
+    "destination": 19
+  }
+},
+{
+  "model": "core.tag",
+  "pk": 1,
+  "fields": {
+    "name": "gothic rainy foggy medieval"
+  }
+},
+{
+  "model": "core.tag",
+  "pk": 2,
+  "fields": {
+    "name": "rainy"
+  }
+},
+{
+  "model": "core.tag",
+  "pk": 3,
+  "fields": {
+    "name": "gothic ,  rainy , foggy , medieval"
+  }
+},
+{
+  "model": "core.tag",
+  "pk": 4,
+  "fields": {
+    "name": "rainy"
+  }
+},
+{
+  "model": "core.tag",
+  "pk": 5,
+  "fields": {
+    "name": "astheics"
+  }
+},
+{
+  "model": "core.tag",
+  "pk": 6,
+  "fields": {
+    "name": "bluesky"
+  }
+},
+{
+  "model": "core.tag",
+  "pk": 7,
+  "fields": {
+    "name": "historical"
+  }
+},
+{
+  "model": "core.tag",
+  "pk": 8,
+  "fields": {
+    "name": "scenic"
+  }
+},
+{
+  "model": "core.tag",
+  "pk": 9,
+  "fields": {
+    "name": "alpine"
+  }
+},
+{
+  "model": "core.tag",
+  "pk": 10,
+  "fields": {
+    "name": "lakeside"
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 1,
+  "fields": {
+    "user": 9,
+    "bio": "hii my name is nikhil",
+    "pic": "images/Screenshot_20250706_225729.jpg",
+    "created": "2026-06-15T16:24:29.611Z"
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 2,
+  "fields": {
+    "user": 6,
+    "bio": "im user10 ",
+    "pic": "images/5822742.jpg",
+    "created": "2026-06-16T07:36:14.230Z"
+  }
+},
+{
+  "model": "core.profile",
+  "pk": 3,
+  "fields": {
+    "user": 8,
+    "bio": "",
+    "pic": "",
+    "created": "2026-06-17T09:21:34.523Z"
+  }
+},
+{
+  "model": "core.follow",
+  "pk": 6,
+  "fields": {
+    "followers": 9,
+    "following": 6
+  }
+},
+{
+  "model": "core.follow",
+  "pk": 7,
+  "fields": {
+    "followers": 6,
+    "following": 9
+  }
+}
+]
