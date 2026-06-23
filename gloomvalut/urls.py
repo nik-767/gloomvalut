@@ -53,6 +53,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/reviews/<int:destination_id>/', ReviewAPI.as_view(), name='reviews'),
+    path('api/follow/<int:user_id>/', views.followAPI.as_view(), name='follow_api'),
     path('api/', include(router.urls)),
 
 
