@@ -1,692 +1,809 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap');
 
+/* ==========================================================================
+   DESIGN SYSTEM & VARIABLES
+   ========================================================================== */
 :root {
-    --bg-base: #060408; /* Deepest gothic obsidian / midnight purple */
-    --bg-surface: #0e0a14; /* Deep charcoal purple / volcanic stone */
-    --bg-card: rgba(18, 12, 24, 0.75); /* Gothic translucent card */
-    --bg-card-hover: rgba(28, 18, 38, 0.9);
+    /* Color Palette */
+    --bg-base: #060408;                  /* Midnight obsidian / crypt black */
+    --bg-surface: #0c0912;               /* Volcanic ash stone / slate black */
+    --bg-card: rgba(14, 10, 20, 0.72);    /* Translucent dark stone glass */
+    --bg-card-hover: rgba(22, 14, 30, 0.88); /* Translucent hover state */
     
-    --accent-purple: #6b21a8; /* Muted royal purple */
-    --accent-purple-bright: #c084fc; /* Bright lavender glow */
-    --accent-amethyst: #a21caf; /* Amethyst purple */
-    --accent-gold: #b45309; /* Weathered antique bronze/gold */
-    --accent-gold-bright: #fbbf24; /* Antique gold glow */
+    /* Accents & Glows */
+    --accent-purple: #581c87;            /* Royal cathedral purple */
+    --accent-purple-glow: #a855f7;       /* Luminescent purple magic */
+    --accent-purple-bright: #d8b4fe;     /* Whispering lavender */
+    --accent-gold: #854d0e;              /* Antique tarnished bronze */
+    --accent-gold-glow: #d97706;         /* Smoldering ember gold */
+    --accent-gold-bright: #f59e0b;       /* Pure relic gold */
     
-    --border-gothic: rgba(107, 33, 168, 0.35); /* Muted purple tint */
-    --border-gothic-bright: rgba(192, 132, 252, 0.6);
-    --border-gold: rgba(180, 83, 9, 0.4); /* Bronze tint */
-    --border-gold-bright: rgba(251, 191, 36, 0.75);
+    /* Borders */
+    --border-gothic: rgba(139, 92, 246, 0.2);     /* Ethereal purple filament */
+    --border-gothic-bright: rgba(168, 85, 247, 0.5);
+    --border-gold: rgba(217, 119, 6, 0.25);        /* Aged metal trim */
+    --border-gold-bright: rgba(245, 158, 11, 0.6);
     
-    --text-primary: #f5f3ff; /* Silver-white parchment */
-    --text-secondary: #cbd5e1; /* Misty stone grey */
-    --text-muted: #7c7289; /* Dark stone shadows */
+    /* Typography Colors */
+    --text-primary: #f8fafc;             /* Alabaster parchment white */
+    --text-secondary: #cbd5e1;           /* Misty tomb grey */
+    --text-muted: #64748b;               /* Deep gargoyle shadow */
+    --text-gold: #e2e8f0;
     
+    /* Fonts */
     --font-heading: 'Cinzel', serif;
     --font-body: 'Cormorant Garamond', serif;
-    --font-ui: 'Inter', sans-serif;
+    --font-ui: 'Outfit', sans-serif;
     
-    --purple-glow: rgba(162, 28, 175, 0.45);
-    --gold-glow: rgba(251, 191, 36, 0.35);
+    /* Glowing Shadows */
+    --glow-purple: 0 0 20px rgba(168, 85, 247, 0.35);
+    --glow-gold: 0 0 15px rgba(245, 158, 11, 0.25);
+    --glow-gold-intense: 0 0 25px rgba(245, 158, 11, 0.45);
+    --glow-red: 0 0 15px rgba(239, 68, 68, 0.4);
+    
+    /* Transitions & Corners */
+    --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --border-radius-gothic: 8px;
 }
 
+/* ==========================================================================
+   BASE & RESET
+   ========================================================================== */
 body {
     margin: 0;
     min-height: 100vh;
     font-family: var(--font-body);
-    background: radial-gradient(circle at center, #1b1226 0%, #0d0814 60%, #050307 100%);
+    background-color: var(--bg-base);
+    /* Soft atmospheric dark fog background */
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(46, 16, 101, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(88, 28, 135, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(12, 9, 18, 1) 0%, #040206 100%);
+    background-attachment: fixed;
     color: var(--text-primary);
     font-size: 1.15rem;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
+/* Damask mesh grid wallpaper overlay */
 .page-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 40px 24px;
+    padding: 60px 20px;
     box-sizing: border-box;
-    /* Gothic damask / diamond grid pattern */
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 0 L100 50 L50 100 L0 50 Z' fill='none' stroke='%236b21a8' stroke-opacity='0.03' stroke-width='1.5'/%3E%3C/svg%3E");
+    position: relative;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z' fill='none' stroke='%238b5cf6' stroke-opacity='0.02' stroke-width='1'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+    width: 100%;
 }
 
-/* Scrollbar styling */
+/* Custom Medieval Scrollbar */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: #050307;
+    background: var(--bg-base);
+    border-left: 1px solid rgba(139, 92, 246, 0.05);
 }
 ::-webkit-scrollbar-thumb {
-    background: #2e1065;
-    border: 1px solid #1e1b4b;
+    background: linear-gradient(180deg, var(--bg-surface) 0%, var(--accent-purple) 50%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-gothic);
     border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #581c87;
+    background: linear-gradient(180deg, var(--accent-purple) 0%, var(--accent-purple-glow) 50%, var(--accent-purple) 100%);
+    border-color: var(--border-gothic-bright);
 }
 
-/* Centered Auth Card */
+/* Link Resets */
+a {
+    color: var(--accent-gold-bright);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+a:hover {
+    color: #fff;
+    text-shadow: var(--glow-purple);
+}
+
+/* ==========================================================================
+   TYPOGRAPHY
+   ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: #ffffff;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   HEADER & HERO SECTIONS
+   ========================================================================== */
+.home-hero {
+    text-align: center;
+    padding: 4rem 0 2rem;
+    position: relative;
+}
+
+.home-hero .hero-title {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #ffffff;
+    /* Castle fire flicker shadow glow */
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.4), 
+                 0 0 20px rgba(168, 85, 247, 0.2), 
+                 0 0 30px rgba(0, 0, 0, 0.8);
+    animation: candle-flicker 5s infinite alternate;
+    margin-bottom: 12px;
+}
+
+.home-hero p {
+    font-family: var(--font-body);
+    font-size: 1.35rem;
+    color: var(--text-secondary);
+    max-width: 650px;
+    margin: 0 auto;
+    font-style: italic;
+    letter-spacing: 0.03em;
+    line-height: 1.7;
+}
+
+/* Search Bar (Modern Instagram but Gothic Runes) */
+.search-container {
+    max-width: 580px;
+    margin: 0 auto 3rem;
+    position: relative;
+}
+
+.search-container input[type="search"] {
+    width: 100%;
+    background: rgba(8, 6, 12, 0.95) !important;
+    border: 1px solid var(--border-gothic) !important;
+    color: var(--text-primary) !important;
+    border-radius: var(--border-radius-gothic) !important;
+    font-family: var(--font-ui) !important;
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+    padding: 14px 22px !important;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+    transition: var(--transition-smooth) !important;
+    height: auto !important;
+}
+
+.search-container input[type="search"]::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+    letter-spacing: 0.05em;
+}
+
+.search-container input[type="search"]:focus {
+    border-color: var(--border-gold-bright) !important;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 15px rgba(245, 158, 11, 0.25) !important;
+    background: rgba(14, 10, 20, 0.98) !important;
+    outline: none !important;
+}
+
+.search-container a {
+    display: inline-block;
+    margin-top: 15px;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.15);
+    padding-bottom: 2px;
+}
+.search-container a:hover {
+    color: var(--accent-purple-bright);
+    border-color: var(--accent-purple-glow);
+    text-shadow: var(--glow-purple);
+}
+
+/* ==========================================================================
+   BUTTONS (GLOWING METALLIC & MINIMALIST STATE CONTROLS)
+   ========================================================================== */
+.btn, .btn-primary, .search-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading) !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #2e1065 0%, #4c1d95 50%, #6b21a8 100%) !important;
+    border: 1px solid var(--border-gothic-bright) !important;
+    border-radius: var(--border-radius-gothic) !important;
+    padding: 12px 30px !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6) !important;
+    transition: var(--transition-smooth) !important;
+    text-decoration: none !important;
+    height: auto !important;
+}
+
+.btn:hover, .btn-primary:hover, .search-btn:hover {
+    background: linear-gradient(135deg, #4c1d95 0%, #6b21a8 50%, #a21caf 100%) !important;
+    border-color: var(--accent-gold-bright) !important;
+    box-shadow: var(--glow-purple), 0 6px 20px rgba(0, 0, 0, 0.8) !important;
+    transform: translateY(-2px);
+    color: #ffffff !important;
+}
+
+.btn:active, .btn-primary:active, .search-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Hollow Gothic Back Button */
+.back-home-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary) !important;
+    background: transparent !important;
+    border: 1px dashed var(--text-muted) !important;
+    border-radius: var(--border-radius-gothic);
+    padding: 10px 24px;
+    transition: var(--transition-smooth);
+}
+
+.back-home-btn:hover {
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   CARDS & SOCIAL POSTS (INSTAGRAM STRUCTURED WITH GOTHIC ARCHES)
+   ========================================================================== */
+.destination-list {
+    margin-top: 1rem;
+}
+
+/* Arched Stone Portal Card Wrapper */
+.destination-card {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-gothic) !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(139, 92, 246, 0.05) !important;
+    transition: var(--transition-smooth) !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Dual Thin Gold/Purple Trim Line inside the card */
+.destination-card::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border: 1px solid rgba(217, 119, 6, 0.08);
+    pointer-events: none;
+    border-radius: 9px;
+}
+
+.destination-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    border-color: var(--border-gold-bright) !important;
+    box-shadow: 
+        0 20px 45px rgba(0, 0, 0, 0.95),
+        0 0 25px rgba(168, 85, 247, 0.15),
+        inset 0 0 25px rgba(217, 119, 6, 0.08) !important;
+}
+
+/* Mysterious Dark Photographic Frame */
+.destination-card .card-img-top {
+    height: 280px;
+    object-fit: cover;
+    /* High contrast vignette filter to look dark and mysterious */
+    filter: sepia(0.3) contrast(1.25) brightness(0.65) saturate(0.65);
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), filter 0.6s ease;
+    border-bottom: 1px solid var(--border-gothic);
+}
+
+.destination-card:hover .card-img-top {
+    filter: sepia(0.05) contrast(1.1) brightness(0.95) saturate(1);
+    transform: scale(1.04);
+}
+
+/* Card Body Layout */
+.destination-card-body {
+    padding: 24px !important;
+    background: linear-gradient(180deg, rgba(12, 9, 18, 0) 0%, rgba(6, 4, 8, 0.9) 100%) !important;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Title & Author Info */
+.destination-card-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.destination-card-author {
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.destination-card-author .text-muted-gothic {
+    color: var(--text-muted);
+}
+
+.destination-card-author .author-link {
+    color: var(--accent-gold-bright);
+    font-weight: 600;
+    border-bottom: 1px dashed rgba(245, 158, 11, 0.3);
+}
+
+.destination-card-author .author-link:hover {
+    color: #ffffff;
+    border-bottom-style: solid;
+    border-color: #ffffff;
+    text-shadow: var(--glow-gold);
+}
+
+.destination-card-subtitle {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    margin-bottom: 14px;
+}
+
+/* Description Text */
+.destination-card-text {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 18px;
+    font-weight: 300;
+}
+
+.destination-card-text strong {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 6px;
+}
+
+/* Rating Stars */
+.average-rating-stars {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-gold-bright);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-shadow: var(--glow-gold);
+}
+
+.average-rating-none {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--text-muted);
+}
+
+/* Tags & Pill Badges */
+.destination-card-meta .badge {
+    background: rgba(88, 28, 135, 0.18) !important;
+    color: var(--accent-purple-bright) !important;
+    border: 1px solid rgba(139, 92, 246, 0.3) !important;
+    font-family: var(--font-ui) !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.06em !important;
+    padding: 6px 12px !important;
+    border-radius: 9999px !important;
+    transition: var(--transition-smooth) !important;
+}
+
+.destination-card-meta .badge:hover {
+    background: rgba(139, 92, 246, 0.3) !important;
+    color: #ffffff !important;
+    border-color: var(--accent-purple-bright) !important;
+    box-shadow: var(--glow-purple);
+}
+
+/* ==========================================================================
+   REVIEWS FEED & INNER COMPONENTS
+   ========================================================================== */
+.review-section {
+    border-top: 1px double var(--border-gothic);
+    padding-top: 20px;
+    margin-top: 15px;
+}
+
+.review-section .review-title {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+/* Custom Nested Review Card */
+.review-card {
+    background: rgba(10, 7, 15, 0.8) !important;
+    border: 1px solid rgba(139, 92, 246, 0.12) !important;
+    border-radius: var(--border-radius-gothic) !important;
+    padding: 16px !important;
+    transition: var(--transition-smooth) !important;
+    position: relative;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
+}
+
+.review-card:hover {
+    border-color: var(--border-gothic-bright) !important;
+    background: rgba(16, 12, 24, 0.9) !important;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.review-text {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.review-meta {
+    font-family: var(--font-ui);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.review-card a {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 10px;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.review-card a[href*="delete"] {
+    color: #ef4444;
+}
+.review-card a[href*="delete"]:hover {
+    color: #fca5a5;
+    text-shadow: var(--glow-red);
+}
+
+/* Card Action Control Links (View / Update / Delete) */
+.card-action-links {
+    margin-top: 20px;
+    border-top: 1px dashed rgba(139, 92, 246, 0.15);
+    padding-top: 15px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.view-review-link, .update-card-link, .delete-card-link {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px dashed transparent;
+    padding-bottom: 2px;
+}
+
+.view-review-link {
+    color: var(--accent-gold);
+}
+.view-review-link:hover {
+    color: var(--accent-gold-bright);
+    border-color: var(--accent-gold-bright);
+    text-shadow: var(--glow-gold);
+}
+
+.update-card-link {
+    color: var(--accent-purple-bright);
+}
+.update-card-link:hover {
+    color: #ffffff;
+    border-color: #ffffff;
+    text-shadow: var(--glow-purple);
+}
+
+.delete-card-link {
+    color: #ef4444;
+}
+.delete-card-link:hover {
+    color: #fca5a5;
+    border-color: #fca5a5;
+    text-shadow: var(--glow-red);
+}
+
+/* ==========================================================================
+   AUTHENTICATION & PROFILE FORMS (OBSIDIAN TOMBS)
+   ========================================================================== */
 .auth-card {
     width: 100%;
-    max-width: 480px;
-    padding: 42px;
+    max-width: 520px;
+    padding: 45px !important;
     background: var(--bg-card);
-    border: 3px double var(--border-gothic);
-    border-radius: 6px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 
-                inset 0 0 35px rgba(107, 33, 168, 0.2);
-    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-gothic) !important;
+    border-radius: 12px;
+    box-shadow: 
+        0 25px 55px rgba(0, 0, 0, 0.9), 
+        inset 0 0 35px rgba(139, 92, 246, 0.06);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     position: relative;
     overflow: hidden;
     margin: 20px auto;
 }
 
+/* Ancient gold double-border inset */
 .auth-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 1px solid rgba(180, 83, 9, 0.15);
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    border: 1px solid rgba(217, 119, 6, 0.12);
     pointer-events: none;
-    box-sizing: border-box;
+    border-radius: 10px;
 }
 
 .auth-card h1, .auth-card h3 {
     font-family: var(--font-heading);
     font-weight: 700;
     color: #ffffff;
-    text-shadow: 0 0 15px var(--purple-glow);
-    letter-spacing: 0.08em;
+    text-shadow: 0 0 15px rgba(168, 85, 247, 0.35);
+    letter-spacing: 0.1em;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .auth-card h1 {
-    font-size: 2.6rem;
-    margin: 0 0 12px;
+    font-size: 2.5rem;
 }
 
 .subtitle {
-    margin: 0 0 32px;
+    margin-top: -10px;
+    margin-bottom: 35px;
     color: var(--text-secondary);
+    font-family: var(--font-body);
     font-style: italic;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
+    letter-spacing: 0.03em;
 }
 
-.error {
-    margin: 0 0 22px;
-    padding: 14px 16px;
-    border-radius: 4px;
-    background: rgba(162, 28, 175, 0.15);
-    color: #f5d0fe;
-    border: 1px solid rgba(162, 28, 175, 0.3);
-    font-size: 0.95rem;
-}
-
+/* Form Layout & Labels */
 .auth-form {
     display: grid;
-    gap: 22px;
+    gap: 24px;
 }
 
 .auth-form label {
     display: grid;
     gap: 8px;
     font-family: var(--font-ui);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     color: var(--text-secondary);
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
-.auth-form input, .auth-form textarea {
+/* Custom Gothic Inputs */
+.auth-form input[type="text"],
+.auth-form input[type="password"],
+.auth-form input[type="number"],
+.auth-form input[type="file"],
+.auth-form textarea {
     width: 100%;
     padding: 14px 18px;
+    background: rgba(6, 4, 9, 0.95);
     border: 1px solid var(--border-gothic);
-    border-radius: 4px;
-    background: rgba(10, 7, 15, 0.85);
+    border-radius: var(--border-radius-gothic);
     color: #ffffff;
     font-family: var(--font-body);
     font-size: 1.2rem;
-    transition: all 0.3s ease;
+    transition: var(--transition-smooth);
     box-sizing: border-box;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
 }
 
-.auth-form input::placeholder, .auth-form textarea::placeholder {
+.auth-form input::placeholder, 
+.auth-form textarea::placeholder {
     color: var(--text-muted);
     font-style: italic;
+    font-size: 1.1rem;
 }
 
-.auth-form input:focus, .auth-form textarea:focus {
+.auth-form input:focus, 
+.auth-form textarea:focus {
     outline: none;
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 12px var(--gold-glow),
-                inset 0 0 10px rgba(180, 83, 9, 0.15);
-    background: rgba(18, 12, 26, 0.95);
+    border-color: var(--border-gold-bright);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 15px rgba(245, 158, 11, 0.2);
+    background: rgba(12, 8, 17, 0.98);
 }
 
-/* Gothic styled buttons */
-.btn {
-    display: inline-block;
-    width: 100%;
-    padding: 14px 0;
-    border: 1px solid var(--accent-gold);
+/* Custom File Upload Button Styling */
+.auth-form input[type="file"] {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    padding: 10px;
+    color: var(--text-secondary);
+}
+
+.auth-form input[type="file"]::-webkit-file-upload-button {
+    background: var(--accent-purple);
+    border: 1px solid var(--border-gothic-bright);
     border-radius: 4px;
-    background: linear-gradient(135deg, #3b0764 0%, #581c87 50%, #701a75 100%);
     color: #ffffff;
     font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: 0.12em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    padding: 6px 12px;
     text-transform: uppercase;
-    text-decoration: none;
-    text-align: center;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-right: 12px;
+    transition: var(--transition-smooth);
 }
 
-.btn:hover {
-    background: linear-gradient(135deg, #581c87 0%, #7e22ce 50%, #a21caf 100%);
-    border-color: var(--accent-gold-bright);
-    box-shadow: 0 0 20px var(--purple-glow);
-    transform: translateY(-2px);
+.auth-form input[type="file"]::-webkit-file-upload-button:hover {
+    background: var(--accent-purple-glow);
+    box-shadow: var(--glow-purple);
 }
 
-.btn:active {
-    transform: translateY(1px);
+/* Error Messaging styling */
+.error {
+    margin-bottom: 25px;
+    padding: 14px 18px;
+    border-radius: var(--border-radius-gothic);
+    background: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 .footer-text {
-    margin: 28px 0 0;
+    margin-top: 30px;
     font-family: var(--font-ui);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: var(--text-secondary);
     text-align: center;
+    letter-spacing: 0.04em;
 }
 
 .footer-text a {
     color: var(--accent-gold-bright);
-    text-decoration: none;
     font-weight: 600;
-    border-bottom: 1px dashed var(--accent-gold-bright);
+    border-bottom: 1px dashed rgba(245, 158, 11, 0.4);
 }
 
 .footer-text a:hover {
-    text-decoration: none;
-    border-bottom-style: solid;
-}
-
-/* Home hero */
-.home-hero {
-    text-align: center;
-    padding: 5rem 0 3rem;
-}
-
-.home-hero .hero-title {
-    font-family: var(--font-heading);
-    font-size: 3.8rem;
-    font-weight: 900;
     color: #ffffff;
-    text-shadow: 0 0 25px rgba(107, 33, 168, 0.85), 0 0 45px rgba(0, 0, 0, 0.95);
-    letter-spacing: 0.08em;
-    margin-bottom: 15px;
-}
-
-.home-hero p {
-    font-family: var(--font-body);
-    color: var(--text-secondary);
-    font-size: 1.35rem;
-    max-width: 720px;
-    margin: 0 auto;
-    font-style: italic;
-}
-
-/* Search container styling */
-.search-container {
-    max-width: 650px;
-    margin: 0 auto;
-}
-
-.search-container input {
-    border: 1px solid var(--border-gothic) !important;
-    background: rgba(10, 7, 15, 0.85) !important;
-    color: #ffffff !important;
-    border-radius: 4px !important;
-    font-family: var(--font-body) !important;
-    padding: 0.85rem 1.4rem !important;
-    font-size: 1.2rem !important;
-    height: auto;
-}
-
-.search-container input:focus {
-    border-color: var(--accent-gold) !important;
-    box-shadow: 0 0 12px var(--gold-glow) !important;
-    outline: none !important;
-}
-
-/* Bootstrap style overriding search and primary buttons */
-.btn-primary, .search-btn {
-    border: 1px solid var(--accent-gold) !important;
-    background: linear-gradient(135deg, #3b0764 0%, #581c87 100%) !important;
-    color: #ffffff !important;
-    font-family: var(--font-heading) !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.08em !important;
-    border-radius: 4px !important;
-    transition: all 0.3s ease !important;
-    padding: 0.75rem 2rem !important;
-    font-size: 1.05rem !important;
-    height: auto;
-}
-
-.btn-primary:hover, .search-btn:hover {
-    background: linear-gradient(135deg, #581c87 0%, #a21caf 100%) !important;
-    border-color: var(--accent-gold-bright) !important;
-    box-shadow: 0 0 15px var(--purple-glow) !important;
-    color: #ffffff !important;
-}
-
-/* Destination card styling (Grid/Flexbox layout) */
-.destination-list {
-    margin-top: 2rem;
-}
-
-.destination-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-gothic) !important;
-    border-radius: 6px !important;
-    overflow: hidden;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75),
-                inset 0 0 25px rgba(0, 0, 0, 0.5);
-    transition: all 0.4s ease;
-    height: 100%;
-}
-
-.destination-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(180, 83, 9, 0.65) !important;
-    box-shadow: 0 18px 45px rgba(107, 33, 168, 0.25), 0 12px 35px rgba(0, 0, 0, 0.85);
-}
-
-.destination-card .card-img-top {
-    height: 240px;
-    object-fit: cover;
-    filter: sepia(0.45) contrast(1.1) brightness(0.65) saturate(0.7);
-    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    border-bottom: 2px solid var(--border-gothic);
-}
-
-.destination-card:hover .card-img-top {
-    filter: sepia(0.1) contrast(1.05) brightness(0.9) saturate(1);
-    transform: scale(1.03);
-}
-
-.destination-card-body {
-    padding: 26px;
-    background: linear-gradient(180deg, rgba(22, 14, 32, 0) 0%, rgba(10, 7, 15, 0.85) 100%);
-}
-
-.destination-card-title {
-    font-family: var(--font-heading);
-    font-size: 1.95rem;
-    color: #ffffff;
-    margin-bottom: 4px;
-    letter-spacing: 0.05em;
-    text-shadow: 0 0 12px rgba(192, 132, 252, 0.25);
-}
-
-.destination-card-author {
-    font-family: var(--font-ui);
-    font-size: 0.85rem;
-    letter-spacing: 0.04em;
-    color: var(--text-muted);
-}
-
-.text-muted-gothic {
-    color: var(--text-muted);
-}
-
-.author-link {
-    color: var(--accent-gold-bright);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.author-link:hover {
-    color: #fbbf24;
-    text-shadow: 0 0 8px var(--gold-glow);
-    text-decoration: underline;
-}
-
-.author-unknown {
-    font-style: italic;
-    color: var(--text-muted);
-}
-
-.destination-card-subtitle {
-    font-family: var(--font-body);
-    color: var(--accent-gold);
-    font-size: 1.15rem;
-    font-style: italic;
-    letter-spacing: 0.05em;
-    margin-bottom: 12px;
-}
-
-.destination-card-text {
-    color: var(--text-secondary);
-    font-size: 1.15rem;
-    line-height: 1.55;
-}
-
-/* Average Rating Styling */
-.average-rating-stars {
-    color: var(--accent-gold-bright);
-    font-weight: bold;
-    text-shadow: 0 0 8px var(--gold-glow);
-    font-family: var(--font-heading);
-    font-size: 1.05rem;
-}
-
-.average-rating-none {
-    color: var(--text-muted);
-    font-style: italic;
-    font-size: 1rem;
-}
-
-/* Review sections inside cards */
-.review-section {
-    margin-top: 22px;
-    border-top: 1px double var(--border-gothic);
-    padding-top: 16px;
-}
-
-.review-section .review-title {
-    font-family: var(--font-heading);
-    font-size: 1rem;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 14px;
-}
-
-.review-card {
-    background: rgba(10, 7, 15, 0.75) !important;
-    border: 1px solid rgba(107, 33, 168, 0.25) !important;
-    border-radius: 4px !important;
-    padding: 15px !important;
-    margin-bottom: 12px !important;
-    transition: all 0.3s ease;
-}
-
-.review-card:hover {
-    background: rgba(22, 14, 32, 0.9) !important;
-    border-color: rgba(180, 83, 9, 0.4) !important;
-}
-
-.review-text {
-    color: var(--text-secondary);
-    font-style: italic;
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-}
-
-.review-meta {
-    color: var(--text-muted);
-    font-family: var(--font-ui);
-    font-size: 0.85rem;
-    letter-spacing: 0.04em;
-}
-
-/* Badges & card metadata links */
-.destination-card-meta .badge {
-    background: rgba(107, 33, 168, 0.2) !important;
-    color: #e9d5ff !important;
-    border: 1px solid rgba(107, 33, 168, 0.45) !important;
-    font-family: var(--font-ui);
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    padding: 6px 12px;
-    border-radius: 4px;
-}
-
-.card-action-links {
-    margin-top: 15px;
-    border-top: 1px dashed rgba(107, 33, 168, 0.2);
-    padding-top: 12px;
-}
-
-.view-review-link, .update-card-link, .delete-card-link {
-    display: inline-block;
-    font-family: var(--font-heading);
-    font-size: 0.85rem;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    transition: all 0.3s ease;
-}
-
-.view-review-link {
-    color: var(--accent-gold);
-    border-bottom: 1px dashed var(--accent-gold);
-}
-
-.view-review-link:hover {
-    color: var(--accent-gold-bright);
     border-bottom-style: solid;
-    text-shadow: 0 0 5px var(--gold-glow);
+    border-color: #ffffff;
+    text-shadow: var(--glow-gold);
 }
 
-.update-card-link {
-    color: var(--accent-purple-bright);
-    border-bottom: 1px dashed var(--accent-purple-bright);
-}
-
-.update-card-link:hover {
-    color: #f3e8ff;
-    border-bottom-style: solid;
-    text-shadow: 0 0 5px var(--purple-glow);
-}
-
-.delete-card-link {
-    color: #b91c1c; /* Crimson delete text */
-    border-bottom: 1px dashed #b91c1c;
-}
-
-.delete-card-link:hover {
-    color: #f87171;
-    border-bottom-style: solid;
-    text-shadow: 0 0 5px rgba(248, 113, 113, 0.4);
-}
-
-/* Pagination Styling */
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 3.5rem;
-    margin-bottom: 2rem;
-}
-
-.step-links {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    background: rgba(18, 12, 24, 0.8);
-    padding: 0.85rem 1.65rem;
-    border: 3px double var(--border-gothic);
-    border-radius: 6px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(107, 33, 168, 0.15);
-    backdrop-filter: blur(8px);
-}
-
-.step-links a {
-    display: inline-block;
-    padding: 0.6rem 1.15rem;
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-family: var(--font-heading);
-    font-size: 0.9rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border: 1px solid var(--border-gothic);
-    border-radius: 4px;
-    background: rgba(10, 7, 15, 0.85);
-    transition: all 0.3s ease;
-}
-
-.step-links a:hover {
-    color: var(--accent-gold-bright);
-    border-color: var(--accent-gold);
-    background: rgba(107, 33, 168, 0.25);
-    box-shadow: 0 0 12px var(--gold-glow);
-    transform: translateY(-2px);
-}
-
-.step-links .current {
-    font-family: var(--font-body);
-    font-size: 1.15rem;
-    font-style: italic;
-    color: var(--accent-gold-bright);
-    padding: 0.5rem 1rem;
-    text-shadow: 0 0 8px rgba(251, 191, 36, 0.45);
-}
-
-/* Profile Specific Layout and Avatar (Tactile Glassmorphism) */
+/* ==========================================================================
+   USER PROFILE PAGE (MAJESTIC ALCHEMY STATE)
+   ========================================================================== */
 .profile-card {
     width: 100%;
-    max-width: 540px;
-    padding: 44px;
+    max-width: 580px;
+    padding: 45px !important;
     background: var(--bg-card);
-    border: 3px double var(--border-gothic);
-    border-radius: 6px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 
-                inset 0 0 40px rgba(107, 33, 168, 0.18);
-    backdrop-filter: blur(14px);
+    border: 1px solid var(--border-gothic) !important;
+    border-radius: 12px;
+    box-shadow: 
+        0 30px 65px rgba(0, 0, 0, 0.95), 
+        inset 0 0 40px rgba(139, 92, 246, 0.08);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     position: relative;
-    overflow: hidden;
-    animation: fadeInCard 0.8s ease-out;
     text-align: center;
     margin: 0 auto;
+    animation: fadeInCard 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .profile-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 1px solid rgba(180, 83, 9, 0.15);
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    border: 1px solid rgba(217, 119, 6, 0.12);
     pointer-events: none;
-    box-sizing: border-box;
+    border-radius: 10px;
 }
 
-.profile-card .follow-form {
-    display: flex;
-    justify-content: center;
-    margin: 0 auto 20px;
-    max-width: 320px;
-    gap: 0.75rem;
-    width: 100%;
-}
-
-.profile-card .follow-form .btn,
-.profile-card .follow-form button,
-.profile-card form button {
-    min-width: 180px;
-    width: auto;
-    padding: 12px 28px;
-    border-radius: 999px;
-    border: 1px solid var(--accent-gold);
-    background: linear-gradient(135deg, #701a75 0%, #a21caf 100%);
-    color: #ffffff;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.profile-card .follow-form .btn:hover,
-.profile-card .follow-form button:hover,
-.profile-card form button:hover {
-    background: linear-gradient(135deg, #a21caf 0%, #c084fc 100%);
-    box-shadow: 0 0 18px rgba(162, 28, 175, 0.45);
-    transform: translateY(-1px);
-}
-
-.profile-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-top: 1rem;
-}
-
-.profile-card .btn {
-    width: auto;
-    min-width: 200px;
-    display: inline-flex;
-    justify-content: center;
-    padding: 14px 26px;
-}
-
-/* Profile page only: stack profile posts vertically and center them */
-.profile-posts-row {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.profile-posts-row .col {
-    width: 100%;
-    max-width: 850px;
-    margin: 0 auto;
-}
-
-@keyframes fadeInCard {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+/* Profile Picture: Glowing Magic Portal Avatar Frame */
 .avatar-wrapper {
     position: relative;
-    width: 170px;
-    height: 170px;
-    margin: 0 auto 28px;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 30px;
 }
 
 .avatar-container {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    padding: 7px;
+    padding: 6px;
     background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-purple) 100%);
-    box-shadow: 0 0 25px rgba(107, 33, 168, 0.45), 0 0 45px rgba(0, 0, 0, 0.7);
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(139, 92, 246, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s ease;
 }
 
 .avatar-container:hover {
-    transform: scale(1.06) rotate(6deg);
-    box-shadow: 0 0 30px var(--gold-glow), 0 0 55px rgba(162, 28, 175, 0.35);
-    background: linear-gradient(135deg, var(--accent-gold-bright) 0%, var(--accent-purple-bright) 100%);
+    transform: scale(1.06) rotate(4deg);
+    box-shadow: 
+        0 12px 30px rgba(0, 0, 0, 0.9),
+        0 0 25px rgba(245, 158, 11, 0.4),
+        0 0 40px rgba(168, 85, 247, 0.35);
+    background: linear-gradient(135deg, var(--accent-gold-bright) 0%, var(--accent-purple-glow) 100%);
 }
 
 .profile-pic {
@@ -696,12 +813,12 @@ body {
     border-radius: 50%;
     border: 3px solid var(--bg-surface);
     background: var(--bg-base);
-    filter: sepia(0.35) contrast(1.1) brightness(0.8);
-    transition: filter 0.35s ease;
+    filter: sepia(0.2) contrast(1.1) brightness(0.85);
+    transition: filter 0.4s ease;
 }
 
 .avatar-container:hover .profile-pic {
-    filter: sepia(0.05) contrast(1.05) brightness(1.0);
+    filter: sepia(0) contrast(1) brightness(1);
 }
 
 .placeholder-avatar {
@@ -709,36 +826,38 @@ body {
     height: 100%;
     border-radius: 50%;
     border: 3px solid var(--bg-surface);
-    background: radial-gradient(circle, #3b0764 0%, #0d0814 100%);
+    background: radial-gradient(circle, #2e1065 0%, #0c0912 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--accent-gold-bright);
     font-family: var(--font-heading);
-    font-size: 4.5rem;
+    font-size: 4rem;
     font-weight: 700;
-    text-shadow: 0 0 15px rgba(251, 191, 36, 0.65);
+    text-shadow: var(--glow-gold);
     user-select: none;
 }
 
+/* Profile Title & Metadata */
 .profile-title {
     font-family: var(--font-heading);
-    font-size: 2.4rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: #ffffff;
-    margin: 0 0 6px;
-    letter-spacing: 0.08em;
-    text-shadow: 0 0 18px rgba(162, 28, 175, 0.45);
+    margin: 0 0 8px;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 15px rgba(168, 85, 247, 0.25);
     text-transform: capitalize;
 }
 
 .profile-meta {
     font-family: var(--font-ui);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 500;
     color: var(--text-muted);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-bottom: 26px;
+    margin-bottom: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -746,72 +865,73 @@ body {
 }
 
 .meta-dot {
-    width: 5px;
-    height: 5px;
+    width: 4px;
+    height: 4px;
     background-color: var(--accent-gold);
     border-radius: 50%;
-    display: inline-block;
 }
 
+/* Stat Counts (Followers / Following) */
 .profile-follow-counts {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 24px;
+    gap: 12px;
+    margin-bottom: 28px;
     flex-wrap: wrap;
 }
 
 .followers-count, .following-count {
-    display: inline-block;
     font-family: var(--font-ui);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: var(--accent-gold-bright);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 8px 16px;
-    margin: 0 8px;
-    background: rgba(180, 83, 9, 0.15);
-    border: 1px solid rgba(180, 83, 9, 0.3);
-    border-radius: 999px;
-    transition: all 0.3s ease;
+    padding: 8px 18px;
+    background: rgba(217, 119, 6, 0.08);
+    border: 1px solid rgba(217, 119, 6, 0.2);
+    border-radius: 9999px;
+    transition: var(--transition-smooth);
 }
 
 .followers-count:hover, .following-count:hover {
-    background: rgba(180, 83, 9, 0.25);
+    background: rgba(217, 119, 6, 0.15);
     border-color: var(--accent-gold-bright);
-    box-shadow: 0 0 12px var(--gold-glow);
+    box-shadow: var(--glow-gold);
+    color: #ffffff;
 }
 
+/* Bio Section */
 .profile-bio-section {
     position: relative;
-    background: rgba(10, 7, 15, 0.55);
-    border: 1px solid rgba(107, 33, 168, 0.22);
-    border-radius: 6px;
-    padding: 22px 26px;
-    margin-bottom: 32px;
+    background: rgba(6, 4, 9, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    border-radius: var(--border-radius-gothic);
+    padding: 24px 30px;
+    margin-bottom: 35px;
     min-height: 80px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .profile-bio-section::before {
     content: '“';
     position: absolute;
-    top: -12px;
+    top: -4px;
     left: 16px;
     font-family: var(--font-heading);
     font-size: 3.5rem;
-    color: rgba(180, 83, 9, 0.25);
+    color: rgba(217, 119, 6, 0.15);
     line-height: 1;
 }
 
 .profile-bio {
     font-family: var(--font-body);
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     color: var(--text-secondary);
     font-style: italic;
     margin: 0;
-    line-height: 1.55;
+    line-height: 1.6;
     position: relative;
     z-index: 1;
 }
@@ -820,39 +940,112 @@ body {
     color: var(--text-muted);
 }
 
+/* Profile Actions (Follow / Settings / Controls) */
 .profile-actions {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 12px;
-}
-
-/* Follow / Unfollow Buttons and Custom Classes */
-.follow-form {
     width: 100%;
 }
 
-.follow-btn {
-    background: linear-gradient(135deg, #701a75 0%, #a21caf 100%) !important;
-    border-color: var(--accent-gold) !important;
+.profile-card .follow-form {
+    width: 100%;
+    max-width: 280px;
 }
 
-.follow-btn:hover {
-    background: linear-gradient(135deg, #a21caf 0%, #c084fc 100%) !important;
-    box-shadow: 0 0 15px rgba(162, 28, 175, 0.6) !important;
+.profile-card .follow-btn {
+    width: 100%;
+    padding: 12px 20px !important;
+    border-radius: 9999px !important;
+}
+
+.profile-card .btn {
+    width: auto;
+    min-width: 240px;
+}
+
+/* Profile layout grid for user post feed */
+.profile-posts-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
 }
 
 .profile-section-title {
     font-family: var(--font-heading);
     font-weight: 700;
     color: #ffffff;
-    text-shadow: 0 0 18px rgba(162, 28, 175, 0.45);
-    letter-spacing: 0.08em;
+    text-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+    letter-spacing: 0.1em;
+    font-size: 2rem;
 }
 
-/* Review Page specific styling */
+/* ==========================================================================
+   PAGINATION (ENCHANTED STEPS)
+   ========================================================================== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 4rem 0 2rem;
+}
+
+.step-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(14, 10, 20, 0.85);
+    padding: 10px 20px;
+    border: 1px solid var(--border-gothic);
+    border-radius: 30px;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.7), 
+        inset 0 0 15px rgba(139, 92, 246, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.step-links a {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    border-radius: 20px;
+    background: rgba(6, 4, 9, 0.9);
+    transition: var(--transition-smooth);
+}
+
+.step-links a:hover {
+    color: var(--accent-gold-bright);
+    border-color: var(--border-gold-bright);
+    background: rgba(139, 92, 246, 0.18);
+    box-shadow: var(--glow-gold);
+    transform: translateY(-1px);
+}
+
+.step-links .current {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--accent-gold-bright);
+    padding: 0 12px;
+    text-shadow: var(--glow-gold);
+}
+
+/* ==========================================================================
+   PAGE-SPECIFIC OVERRIDES & OTHER COMPONENTS
+   ========================================================================== */
 .destination-detail img {
-    border: 3px double var(--border-gothic);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--border-gothic);
+    border-radius: 8px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.95);
     width: 100%;
     height: auto;
 }
@@ -860,55 +1053,103 @@ body {
 .review-item {
     color: var(--text-primary);
     font-size: 1.25rem;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    line-height: 1.6;
 }
 
 .review-item strong {
-    font-family: var(--font-heading);
-    color: var(--accent-gold);
-    font-size: 1.05rem;
-    letter-spacing: 0.06em;
-}
-
-.back-home-btn {
-    display: inline-block;
-    text-align: center;
-    background-color: transparent !important;
-    border: 1px dashed var(--text-muted) !important;
-    color: var(--text-secondary) !important;
-    text-decoration: none !important;
-    padding: 10px 20px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    font-family: var(--font-heading);
-    font-size: 0.9rem;
-    letter-spacing: 0.08em;
+    font-family: var(--font-ui);
+    color: var(--accent-gold-bright);
+    font-size: 0.85rem;
+    font-weight: 600;
     text-transform: uppercase;
-}
-
-.back-home-btn:hover {
-    border-color: #ffffff !important;
-    color: #ffffff !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 6px;
+    text-shadow: var(--glow-gold);
 }
 
 hr {
     border-top: 1px double var(--border-gothic) !important;
-    opacity: 0.4 !important;
-    margin: 2rem 0 !important;
+    opacity: 0.25 !important;
+    margin: 2.5rem 0 !important;
 }
 
 .container {
     max-width: 1200px;
 }
 
-/* Responsive adjustments */
+/* Bootstrap class override fix for form labels and items */
+.form-control-lg {
+    border-radius: var(--border-radius-gothic) !important;
+}
+
+/* ==========================================================================
+   ANIMATIONS & KEYFRAMES
+   ========================================================================== */
+@keyframes candle-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        text-shadow: 
+            0 0 10px rgba(168, 85, 247, 0.45), 
+            0 0 20px rgba(168, 85, 247, 0.25), 
+            0 0 35px rgba(168, 85, 247, 0.15),
+            0 0 4px rgba(245, 158, 11, 0.2);
+    }
+    20%, 24%, 55% {
+        text-shadow: 
+            0 0 8px rgba(168, 85, 247, 0.35), 
+            0 0 15px rgba(168, 85, 247, 0.18), 
+            0 0 28px rgba(168, 85, 247, 0.1),
+            0 0 2px rgba(245, 158, 11, 0.1);
+    }
+    22% {
+        text-shadow: 
+            0 0 12px rgba(168, 85, 247, 0.55), 
+            0 0 25px rgba(168, 85, 247, 0.35), 
+            0 0 40px rgba(168, 85, 247, 0.25),
+            0 0 6px rgba(245, 158, 11, 0.35);
+    }
+}
+
+@keyframes fadeInCard {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN SYSTEM
+   ========================================================================== */
+@media (max-width: 992px) {
+    .destination-card .card-img-top {
+        height: 240px;
+    }
+}
+
 @media (max-width: 768px) {
     .home-hero .hero-title {
-        font-size: 2.8rem;
+        font-size: 2.6rem;
+        letter-spacing: 0.1em;
+    }
+    
+    .home-hero p {
+        font-size: 1.15rem;
     }
     
     .auth-card, .profile-card {
-        padding: 24px;
+        padding: 30px 20px !important;
+    }
+    
+    .profile-title {
+        font-size: 1.8rem;
+    }
+    
+    .destination-card .card-img-top {
+        height: 210px;
     }
 }
