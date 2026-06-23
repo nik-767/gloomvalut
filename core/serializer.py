@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Destination , Review , Profile
+from .models import Destination , Review , Profile , Follow
 from django.contrib.auth.models import User
 
 class gloomvalutseralizer(serializers.ModelSerializer):
@@ -37,3 +37,10 @@ class Profileseralizer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = "__all__"
+
+class Followseralizer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Follow
+        fields = '__all__'
+
