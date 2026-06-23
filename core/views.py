@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from rest_framework.views import APIView , Response 
 from rest_framework import viewsets , status
-from .serializer import gloomvalutseralizer , Registerseralizer , loginseralizer , Reviewseralizer , Profileseralizer
+from .serializer import gloomvalutseralizer , Registerseralizer , Reviewseralizer , Profileseralizer , Followseralizer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from django.db.models import Avg  
@@ -336,5 +336,47 @@ class ReviewAPI(APIView):
                     serializer.data , status=status.HTTP_201_CREATED
                 )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class followAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self , request, user_id):
+        data = Follow.objects.filter(following= user_id)
+        data2 = Follow.objects.filter(followers=user_id)
+        data_serializer = Followseralizer(data, many=True)
+        data2_serializer = Followseralizer(data2, many=True)
+
+
+        return Response({'following':data_serializer.data, 
+                        'followerse':data2_serializer.data},
+                        status=status.HTTP_200_OK)
+    
+    def post(self, request, user_id):
+        data = get_object_or_404(User, id =user_id)  # Target user ko database se nikala
+        user_exist = Follow.objects.filter(followers=request.user, following=data)
+        if data == request.user:
+            return Response(
+    {"error": "You cannot follow yourself"},
+    status=status.HTTP_400_BAD_REQUEST
+)
+        else:
+            if user_exist.exists():
+                user_exist.delete()
+                return Response(
+                {"message": "Unfollowed successfully", "status": "unfollowed"}, 
+                status=status.HTTP_200_OK
+            )
+            else:
+                Follow.objects.create(
+                followers=request.user,
+                following=data
+                )
+                
+        # Frontend ko success response bheja
+            return Response(
+                {"message": "Followed successfully", "status": "followed"}, 
+                status=status.HTTP_201_CREATED
+            )
+
 
 
