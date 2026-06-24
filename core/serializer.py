@@ -44,3 +44,4 @@ class Followseralizer(serializers.ModelSerializer):
         model = Follow
         fields = '__all__'
 
+
