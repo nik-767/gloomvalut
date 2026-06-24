@@ -389,7 +389,24 @@ class feedAPI(APIView):
 
 
 class ProfileAPI(APIView):
-    pass
+    def get(self, request, user_id):
+        data = get_object_or_404(Profile, user_id=user_id)
+        data2 = data.user.destinations.all()
+        followers_count = Follow.objects.filter(followers=data.user).count()
+        following_count = Follow.objects.filter(following=data.user).count()
+        is_following = False
+        if request.user.is_authenticated:
+            is_following = Follow.objects.filter(followers=request.user, following=data.user).exists()
+        
+        serializer = Profileseralizer(data)
+        serializer2 = gloomvalutseralizer(data2, many=True)
+        return Response({
+            'profile': serializer.data,
+            'user_posts': serializer2.data,
+            'is_following': is_following,
+            'followers_count': followers_count,
+            'following_count': following_count
+        })
 
 
 
