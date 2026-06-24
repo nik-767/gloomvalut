@@ -380,7 +380,12 @@ class followAPI(APIView):
 
 
 class feedAPI(APIView):
-    pass
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        data = Follow.objects.filter(followers=request.user).values_list('following', flat=True)
+        data2 = Destination.objects.filter( posted_by_id__in=data).order_by('-id')
+        serializer = gloomvalutseralizer(data2, many=True)
+        return Response(serializer.data)
 
 
 
