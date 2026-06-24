@@ -56,6 +56,7 @@ urlpatterns = [
     path('api/follow/<int:user_id>/', views.followAPI.as_view(), name='follow_api'),
     path('api/feed/', views.feedAPI.as_view(), name='feed_api'),
     path('api/', include(router.urls)),
+    path('api/profile/<int:user_id>/', views.ProfileAPI.as_view(), name='profile_API'),
 
 
 
