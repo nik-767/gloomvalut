@@ -388,5 +388,9 @@ class feedAPI(APIView):
         return Response(serializer.data)
 
 
+class ProfileAPI(APIView):
+    pass
+
+
 
 
