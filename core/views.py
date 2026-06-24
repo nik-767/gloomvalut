@@ -379,4 +379,9 @@ class followAPI(APIView):
             )
 
 
+class feedAPI(APIView):
+    pass
+
+
+
 
