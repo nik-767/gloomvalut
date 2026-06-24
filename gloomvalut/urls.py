@@ -54,6 +54,7 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/reviews/<int:destination_id>/', ReviewAPI.as_view(), name='reviews'),
     path('api/follow/<int:user_id>/', views.followAPI.as_view(), name='follow_api'),
+    path('api/feed/', views.feedAPI.as_view(), name='feed_api'),
     path('api/', include(router.urls)),
 
 
