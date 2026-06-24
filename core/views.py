@@ -380,6 +380,10 @@ class followAPI(APIView):
 
 
 class feedAPI(APIView):
+    """
+    API view to retrieve the customized activity feed for the logged-in user.
+    Returns destinations/posts created by users whom the current user follows.
+    """
     permission_classes = [IsAuthenticated]
     def get(self, request):
         data = Follow.objects.filter(followers=request.user).values_list('following', flat=True)
@@ -389,6 +393,10 @@ class feedAPI(APIView):
 
 
 class ProfileAPI(APIView):
+    """
+    API view to retrieve public profile information of a specific user.
+    Returns profile details, posts created by the user, and follower/following stats.
+    """
     def get(self, request, user_id):
         data = get_object_or_404(Profile, user_id=user_id)
         data2 = data.user.destinations.all()
