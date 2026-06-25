@@ -117,3 +117,29 @@ All API endpoints require JWT authorization tokens (except `/api/register/`).
   - `GET /api/feed/`: Customized feed of followed users.
   - `GET /api/profile-details/<user_id>/`: User profile details, posts, and follow stats.
 
+## Project Structure
+
+```text
+gloomvalut/
+│
+├── core/                   # Main Django app containing core logic
+│   ├── migrations/         # Database migrations
+│   ├── admin.py            # Django Admin registration
+│   ├── apps.py             # App Configuration
+│   ├── models.py           # Database Models
+│   ├── serializer.py       # REST Framework Serializers
+│   ├── tests.py            # Unit tests
+│   └── views.py            # Application Views & REST API View classes
+│
+├── gloomvalut/             # Project-level configuration directory
+│   ├── settings.py         # Django settings file
+│   ├── urls.py             # URL routing rules
+│   └── wsgi.py / asgi.py   # Gateway interface configs
+│
+├── media/                  # Location for user-uploaded castle & profile pictures
+├── static/                 # Static CSS, JS, and image files
+├── templates/              # HTML layout templates
+├── manage.py               # Django execution script
+├── requirements.txt        # Project package dependencies
+└── db.sqlite3              # Local SQLite database
+```
