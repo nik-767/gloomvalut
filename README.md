@@ -4,6 +4,7 @@ Gloomvalut is a Django-based social and exploration platform for castle enthusia
 
 ## Features
 
+
 - **Castle Destinations**: Share castles with names, countries, descriptions, images, and atmosphere ratings.
 - **Reviews & Ratings**: Rate castles and write descriptive reviews.
 - **User Profiles**: Custom profiles displaying bios, profile pictures, user posts, and social statistics.
