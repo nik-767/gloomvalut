@@ -83,3 +83,37 @@ Gloomvalut's relational database contains the following key models:
 5. **Follow**: Manages user relationships.
    - `followers`: ForeignKey pointing to the user who is following.
    - `following`: ForeignKey pointing to the user being followed.
+
+## Views & API Endpoints
+
+Gloomvalut includes both interactive HTML templates (web views) and REST API endpoints.
+
+### Web Views
+- `/` or `/home`: Home page featuring castle destinations, rating displays, castle additions, and paginated searches.
+- `/register`: User registration form.
+- `/login`: User authentication view.
+- `/review/<destination_id>`: Review/rating dashboard for a specific destination.
+- `/update-review/<id>`: Edit/update your published reviews.
+- `/delete-review/<id>`: Delete reviews.
+- `/update-castle/<id>` & `/delete-castle/<id>`: Update and delete destination postings.
+- `/profile` & `/profile/update`: View and edit personal profiles.
+- `/follow/<user_id>`: Quick follow/unfollow toggle.
+- `/profile/<user_id>`: Public user profile page displaying statistics (follower/following count) and posts.
+- `/feed`: Activity feed displaying recent posts from followed users.
+
+### REST API Endpoints
+All API endpoints require JWT authorization tokens (except `/api/register/`).
+
+- **Authentication**:
+  - `POST /api/register/`: Registers a user and returns a access/refresh token pair.
+
+- **Destinations & Reviews**:
+  - `GET | POST | PUT | DELETE /api/gloomvalut/`: CRUD endpoints for castles.
+  - `GET | POST | PUT | DELETE /api/review/`: CRUD endpoints for reviews.
+  - `GET | POST /api/review-destination/<destination_id>/`: Retrieves or posts reviews for a specific destination.
+
+- **Social & Profiles**:
+  - `GET | POST /api/follow/<user_id>/`: Lists follow links or follows/unfollows a user.
+  - `GET /api/feed/`: Customized feed of followed users.
+  - `GET /api/profile-details/<user_id>/`: User profile details, posts, and follow stats.
+
