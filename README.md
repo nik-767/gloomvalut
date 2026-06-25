@@ -52,3 +52,34 @@ python manage.py runserver
 ```
 Visit the application in your browser at `http://127.0.0.1:8000/`.
 
+## Database Models
+
+Gloomvalut's relational database contains the following key models:
+
+1. **Destination**: Represents a castle or place of interest.
+   - `posted_by`: ForeignKey to the `User` who posted it (set to null if the user is deleted).
+   - `castle`: Unique CharField representing the castle's name.
+   - `country`: CharField for the castle's location country.
+   - `description`: Detailed text description.
+   - `image`: Image upload location under `images/`.
+   - `atmosphere`: FloatField representing user atmosphere rating.
+   - `tags`: ManyToMany relationship to `Tag`.
+
+2. **Review**: Represents a user review for a destination.
+   - `comment`: Text comment.
+   - `rating`: Integer rating.
+   - `user`: ForeignKey to the reviewer (`User`).
+   - `destination`: ForeignKey to the rated `Destination`.
+
+3. **Tag**: Tags associated with different castles (e.g., historical, scenic).
+   - `name`: CharField for the tag's name.
+
+4. **Profile**: Extension of the default Django `User` model.
+   - `user`: OneToOneField linked to Django `User`.
+   - `bio`: Short user biography.
+   - `pic`: Profile picture.
+   - `created`: Date and time of profile creation.
+
+5. **Follow**: Manages user relationships.
+   - `followers`: ForeignKey pointing to the user who is following.
+   - `following`: ForeignKey pointing to the user being followed.
