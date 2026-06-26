@@ -4,6 +4,7 @@ Gloomvalut is a Django-based social and exploration platform for castle enthusia
 
 ## Features
 
+
 - **Castle Destinations**: Share castles with names, countries, descriptions, images, and atmosphere ratings.
 - **Reviews & Ratings**: Rate castles and write descriptive reviews.
 - **User Profiles**: Custom profiles displaying bios, profile pictures, user posts, and social statistics.
@@ -88,6 +89,7 @@ Gloomvalut's relational database contains the following key models:
 
 Gloomvalut includes both interactive HTML templates (web views) and REST API endpoints.
 
+
 ### Web Views
 - `/` or `/home`: Home page featuring castle destinations, rating displays, castle additions, and paginated searches.
 - `/register`: User registration form.
@@ -100,6 +102,7 @@ Gloomvalut includes both interactive HTML templates (web views) and REST API end
 - `/follow/<user_id>`: Quick follow/unfollow toggle.
 - `/profile/<user_id>`: Public user profile page displaying statistics (follower/following count) and posts.
 - `/feed`: Activity feed displaying recent posts from followed users.
+
 
 ### REST API Endpoints
 All API endpoints require JWT authorization tokens (except `/api/register/`).
