@@ -140,7 +140,6 @@ def review_view(request, Destination_id):
 @login_required
 def Update_view(request, id):
     update = get_object_or_404(Review, id=id)
- 
     # FIX 3: was "else: update.user != request.user" which does nothing
     # and "return Response()" which crashes in a regular view
     if update.user != request.user:
@@ -175,6 +174,8 @@ def delete_review(request, id):
 @login_required
 def Update_castle(request, id):
     data = get_object_or_404(Destination, id=id)
+    if data.posted_by != request.user:
+            return HttpResponseForbidden("You can only edit your own castles.")
 
     if request.method == "POST":
         data.castle = request.POST.get('castle')
@@ -193,7 +194,8 @@ def Update_castle(request, id):
 @login_required
 def delete_castle(request, id):
     delete_data = get_object_or_404(Destination , id=id)
-    
+    if delete_data.posted_by != request.user:
+        return HttpResponseForbidden("You can only delete your own castles.")
 
     delete_data.delete()
 
