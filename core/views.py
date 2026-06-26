@@ -4,7 +4,6 @@ from django.http import HttpResponse , HttpResponseForbidden
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout 
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
 from rest_framework.views import APIView , Response 
 from rest_framework import viewsets , status
 from .serializer import gloomvalutseralizer , Registerseralizer , Reviewseralizer , Profileseralizer , Followseralizer
