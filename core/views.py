@@ -100,7 +100,7 @@ def login_view(request):
 
     return render(request, 'core/login.html', {'error': error})
     
-
+@login_required
 def review_view(request, Destination_id):
     # 1. URL se aayi hui ID ke hisab se database se Destination (Castle/Jaga) nikaalo. Agar nahi mili toh 404 error de do.
     watching = get_object_or_404(Destination, id=Destination_id)
@@ -192,6 +192,7 @@ def Update_castle(request, id):
     
     return render(request, 'core/update_card.html', {'dest': data})
 
+@login_required
 def delete_castle(request, id):
     delete_data = get_object_or_404(Destination , id=id)
     
