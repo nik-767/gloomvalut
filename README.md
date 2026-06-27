@@ -146,3 +146,7 @@ gloomvalut/
 ├── requirements.txt        # Project package dependencies
 └── db.sqlite3              # Local SQLite database
 ```
+
+AUTHOR 
+-----------
+NIKHIL KALRA
