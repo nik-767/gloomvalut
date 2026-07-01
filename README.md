@@ -69,7 +69,7 @@ Open http://127.0.0.1:8000/ in your browser.
 - GET /api/feed/
 - GET /api/profile-details/<user_id>/
 
-## Project Structure
+## Project Structure..
 
 ```text
 gloomvalut/
