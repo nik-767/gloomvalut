@@ -16,6 +16,11 @@ class Registerseralizer(serializers.ModelSerializer):
         'password' : {'write_only':True}
         }
 
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("Username already exists")
+        return value
+
     def create(self,validated_data):
     # hash the plan text pass automatically 
         return User.objects.create_user(

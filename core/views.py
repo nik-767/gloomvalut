@@ -4,6 +4,7 @@ from django.http import HttpResponse , HttpResponseForbidden
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout 
 from django.shortcuts import get_object_or_404
+from django.db import IntegrityError
 from rest_framework.views import APIView , Response 
 from rest_framework import viewsets , status
 from .serializer import gloomvalutseralizer , Registerseralizer , Reviewseralizer , Profileseralizer , Followseralizer
@@ -64,22 +65,31 @@ def home(request):
     return render(request, "core/home.html",{"page_obj" : page_obj, "search":search})
 
 def Register(request):
+    error = None
     if request.method == "POST":  # 1. Did the user click 'Submit' on the register form?
-        username = request.POST.get('username')  # 2. Grab the text they typed into <input name="username">
-        password = request.POST.get("password")  # 3. Grab the text they typed into <input name="password">
+        username = request.POST.get('username', '').strip()  # 2. Grab the text they typed into <input name="username">
+        password = request.POST.get("password", "")  # 3. Grab the text they typed into <input name="password">
 
-        # 4. Create the new user. 
-        # Crucial concept: We use .create_user() instead of standard .create() 
-        # because Django automatically converts the plain text password into a secure hash.
-        user = User.objects.create_user(
-            username=username,
-            password=password
-        )
-        Profile.objects.create(user=user)
-        
-        return redirect('login')  # 5. Send them straight to the login page
+        if not username or not password:
+            error = "Please enter both username and password."
+        elif User.objects.filter(username=username).exists():
+            error = "Username already exists"
+        else:
+            try:
+                # 4. Create the new user.
+                # Crucial concept: We use .create_user() instead of standard .create()
+                # because Django automatically converts the plain text password into a secure hash.
+                user = User.objects.create_user(
+                    username=username,
+                    password=password
+                )
+            except IntegrityError:
+                error = "Username already exists"
+            else:
+                Profile.objects.create(user=user)
+                return redirect('login')  # 5. Send them straight to the login page
     
-    return render(request, "core/register.html")  # 6. If they just arrived (GET), show them the blank signup form
+    return render(request, "core/register.html", {"error": error})  # 6. If they just arrived (GET), show them the blank signup form
 
 def login_view(request):
 
