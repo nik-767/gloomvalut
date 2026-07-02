@@ -21,10 +21,6 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
-from django.shortcuts import render, redirect
-from django.db.models import Avg
-from .models import Destination
-
 @login_required
 def home(request):
     # 1. Agar user form submit kare (POST Request)
@@ -51,12 +47,9 @@ def home(request):
     # 2. Page par data dikhane ka logic (GET Request)
     search = request.GET.get("castle")
     
+    dest = Destination.objects.annotate(Avg_rate=Avg('review__rating')).order_by('id')
     if search:
-        # Agar search kiya, toh filtered data dikhao (Bina rating ke)
-        dest = Destination.objects.filter(castle__icontains=search)
-    else:
-        # Agar search nahi kiya, toh saare castles par live Avg Rating chipkao
-        dest = Destination.objects.annotate(Avg_rate=Avg('review__rating'))
+        dest = dest.filter(castle__icontains=search)
 
     paginator = Paginator(dest,6)
     page_number = request.GET.get("page")
@@ -171,15 +164,11 @@ def delete_review(request, id):
     review = get_object_or_404(Review, id=id)
     if review.user != request.user:
         raise PermissionDenied
-    if request.method == "POST":
     # 2. Save the destination ID so we know where to redirect back to
-    # (Assumes your Review model has a foreign key to Destination, adjust field name if necessary)
-        destination_id = review.destination.id 
+    destination_id = review.destination.id 
     # 3. Delete from database
-        review.delete()
-        return redirect('review_view', Destination_id=destination_id)
-    # 4. Agar koi direct URL open kare (GET request), to bina delete kiye wapas bhej do
-    return redirect('review_view', Destination_id=review.destination_id)
+    review.delete()
+    return redirect('review_view', Destination_id=destination_id)
 
 @login_required
 def Update_castle(request, id):
@@ -262,8 +251,8 @@ def Follows(request,  user_id):
 def Public_profile(request, user_id): # USER_ID USE FOR  jis user k profile dekhna h uski id
     data = get_object_or_404(Profile,user_id=user_id)
     data2 = data.user.destinations.all()
-    followers_count = Follow.objects.filter(followers=data.user).count()
-    following_count = Follow.objects.filter(following=data.user).count()
+    followers_count = Follow.objects.filter(following=data.user).count()
+    following_count = Follow.objects.filter(followers=data.user).count()
     is_following = False
     if request.user.is_authenticated:
         is_following = Follow.objects.filter(followers=request.user, following=data.user).exists()
@@ -358,8 +347,8 @@ class followAPI(APIView):
         data2_serializer = Followseralizer(data2, many=True)
 
 
-        return Response({'following':data_serializer.data, 
-                        'followerse':data2_serializer.data},
+        return Response({'following':data2_serializer.data, 
+                        'followerse':data_serializer.data},
                         status=status.HTTP_200_OK)
     
     def post(self, request, user_id):
@@ -411,8 +400,8 @@ class ProfileAPI(APIView):
     def get(self, request, user_id):
         data = get_object_or_404(Profile, user_id=user_id)
         data2 = data.user.destinations.all()
-        followers_count = Follow.objects.filter(followers=data.user).count()
-        following_count = Follow.objects.filter(following=data.user).count()
+        followers_count = Follow.objects.filter(following=data.user).count()
+        following_count = Follow.objects.filter(followers=data.user).count()
         is_following = False
         if request.user.is_authenticated:
             is_following = Follow.objects.filter(followers=request.user, following=data.user).exists()
