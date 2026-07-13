@@ -12,3 +12,5 @@
 body { background: var(--bg-primary); }
 .glass-panel { background: #ffffff; border: 1px solid #e2e8f0; }
 .rating-chip { display: inline-flex; }
+.btn { padding: 8px 16px; border-radius: 6px; }
+.btn-primary { background: #0f172a; color: #fff; }
