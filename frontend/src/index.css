@@ -10,3 +10,5 @@
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-thumb { background: #e2e8f0; }
 body { background: var(--bg-primary); }
+.glass-panel { background: #ffffff; border: 1px solid #e2e8f0; }
+.rating-chip { display: inline-flex; }
