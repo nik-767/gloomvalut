@@ -6,3 +6,7 @@
   --bg-secondary: #ffffff;
   --border-color: #e2e8f0;
 }
+/* Scrollbars & Utilities */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: #e2e8f0; }
+body { background: var(--bg-primary); }
