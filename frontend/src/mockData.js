@@ -1,3 +1,3 @@
-export const initialUsers = [
-  { id: 1, username: 'castle_explorer', email: 'explorer@gloomvault.com', isCurrentUser: true }
-];
+export const initialUsers = [];
+export const initialProfiles = [];
+export const initialFollows = [];
