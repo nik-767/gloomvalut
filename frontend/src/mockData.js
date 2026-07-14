@@ -1,3 +1,1 @@
-export const initialUsers = [];
-export const initialProfiles = [];
-export const initialFollows = [];
+export const initialDestinations = [];
