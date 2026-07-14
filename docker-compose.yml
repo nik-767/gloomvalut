@@ -1,4 +1,20 @@
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: gloomvalut
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: nikki
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d gloomvalut"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   web:
     build: .
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
@@ -9,4 +25,15 @@ services:
     environment:
       DEBUG: "True"
       ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0"
-      DB_ENGINE: "sqlite"
+      DB_ENGINE: "postgres"
+      DB_NAME: gloomvalut
+      DB_USER: postgres
+      DB_PASSWORD: nikki
+      DB_HOST: db
+      DB_PORT: "5432"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
