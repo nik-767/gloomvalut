@@ -1,1 +1,1 @@
-/* Bio, Stats, and Dates added */
+/* Follow toggle interaction added */
