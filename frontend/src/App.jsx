@@ -1,3 +1,4 @@
+/* Documented App view router states */
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import AuthPage from './components/AuthPage';
