@@ -1,7 +1,7 @@
 import React from 'react';
 import { Star, MapPin, User } from 'lucide-react';
 
-export default function DestinationCard({ destination, creator, tags, onSelect, onSelectCreator }) {
+export default function DestinationCard({ destination, creator, tags = [], onSelect, onSelectCreator }) {
   // Truncate description for card preview
   const truncateText = (text, maxLength) => {
     if (!text) return '';
