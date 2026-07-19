@@ -14,3 +14,19 @@ Thumbs.db
 # Temp files
 *.crdownload
 er.email
+
+# Editor / local temp files
+.vscode/
+tempCodeRunnerFile.py
+
+# Practice / learning files
+dict.py
+errorhandling.py
+func.py
+oop.py
+practice1.py
+practice2.py
+pre.py
+set.py
+string.py
+tuple.py
