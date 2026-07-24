@@ -31,10 +31,18 @@ SECRET_KEY = os.getenv(
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
 allowed_hosts = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0')
-ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(',') if host.strip()]
 
+import os
 
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1,gloomvalut.onrender.com"
+).split(",")
 # Application definition
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://gloomvalut.onrender.com",
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,10 +54,11 @@ INSTALLED_APPS = [
     'core',
     'rest_framework',
     'rest_framework_simplejwt',
-
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,7 +67,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+CORS_ALLOWED_ORIGINS = [
+    'https://gloomvalut.onrender.com',
+    'http://localhost:5173',
+    "http://127.0.0.1:5173"
+]
+CSRF_TRUSTED_ORIGINS = [
+    'https://gloomvalut.onrender.com',
+    'http://localhost:5173',
+    "http://127.0.0.1:5173"
+]
 ROOT_URLCONF = 'gloomvalut.urls'
 
 TEMPLATES = [
