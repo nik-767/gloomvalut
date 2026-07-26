@@ -17,4 +17,9 @@ export const refreshToken = async (refresh) => {
     });
 }
 
-hh nikhil
+export const getCurrentUser = async () => {
+    const response = await api.get("user/");
+    return response.data;
+};
+
+
