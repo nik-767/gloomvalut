@@ -7,6 +7,8 @@ import ExploreView from './components/ExploreView';
 import DestinationDetail from './components/DestinationDetail';
 import ProfileView from './components/ProfileView';
 import AddDestinationModal from './components/AddDestinationModal';
+import { AuthProvider } from "./context/AuthContext";
+
 
 import {
   initialUsers,
@@ -147,6 +149,7 @@ export default function App() {
   };
 
   return (
+  <AuthProvider>
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Dynamic Backgrounds */}
       <div className="bg-glow-top" />
@@ -157,9 +160,9 @@ export default function App() {
         <AuthPage onLoginSuccess={handleLoginSuccess} />
       ) : (
         <>
-          <Navbar 
-            activeView={currentView} 
-            onViewChange={handleViewChange} 
+          <Navbar
+            activeView={currentView}
+            onViewChange={handleViewChange}
             currentUser={currentUser}
             onLogout={handleLogout}
           />
@@ -221,7 +224,6 @@ export default function App() {
             )}
           </main>
 
-          {/* Add Castle Modal */}
           <AddDestinationModal
             isOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
@@ -231,5 +233,6 @@ export default function App() {
         </>
       )}
     </div>
-  );
+  </AuthProvider>
+);
 }

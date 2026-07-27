@@ -1,4 +1,3 @@
-import React, { createContext, useContext, useState} from 'react';
 import { loginUser , getCurrentUser} from '../api/authapi';
 import React, { createContext, useState, useEffect } from "react";
 //create a new context
@@ -6,9 +5,8 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children}) => {
 
-    const [User, setUser] = useState(null);
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const login = async (credentials) => {
@@ -22,8 +20,8 @@ export const AuthProvider = ({ children}) => {
         setIsAuthenticated(true);
     };
     const logout = () => {
-        localStorage.removeItem("access");
-        localStorage.removeItem("refresh");
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
 
         setUser(null);
         setIsAuthenticated(false);
@@ -53,8 +51,8 @@ export const AuthProvider = ({ children}) => {
     }, []);
 
     return (
-        <AuthContext.provider value={{
-        User,
+        <AuthContext.Provider value={{
+        user,
         loading,
         isAuthenticated,
         login,
@@ -62,6 +60,6 @@ export const AuthProvider = ({ children}) => {
         }}
         >
             {children}
-        </AuthContext.provider>
+        </AuthContext.Provider>
     );
 };
