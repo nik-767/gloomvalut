@@ -1,5 +1,5 @@
 import { loginUser , getCurrentUser} from '../api/authapi';
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect , useContext } from "react";
 //create a new context
 export const AuthContext = createContext();
 
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children}) => {
         return;
         }
         try {
-            const curentUser = await getCurrentUser();
+            const currentUser = await getCurrentUser();
 
             setUser(currentUser);
             setIsAuthenticated(true);
@@ -45,6 +45,7 @@ export const AuthProvider = ({ children}) => {
             setLoading(false);
         }
     };
+    
 
     useEffect(() => {
         loadUser();
@@ -62,4 +63,8 @@ export const AuthProvider = ({ children}) => {
             {children}
         </AuthContext.Provider>
     );
+};
+
+export const useAuth = () => {
+    return useContext(AuthContext);
 };

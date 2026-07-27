@@ -7,7 +7,7 @@ import ExploreView from './components/ExploreView';
 import DestinationDetail from './components/DestinationDetail';
 import ProfileView from './components/ProfileView';
 import AddDestinationModal from './components/AddDestinationModal';
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./components/AuthContext";
 
 
 import {
@@ -27,9 +27,10 @@ export default function App() {
   const [destinations, setDestinations] = useState(initialDestinations);
   const [reviews, setReviews] = useState(initialReviews);
   const [follows, setFollows] = useState(initialFollows);
+  const {user , isAuthenticated, login , logout} = useAuth();
 
   // Auth Session State
-  const [currentUser, setCurrentUser] = useState(users[0]); // Starts logged in as 'castle_explorer'
+  const [currentUser, setCurrentUser] = useState(users[0] || null); // Starts logged in as 'castle_explorer' or null
 
   // Navigation State
   const [currentView, setCurrentView] = useState('feed');
@@ -150,11 +151,7 @@ export default function App() {
 
   return (
   <AuthProvider>
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Dynamic Backgrounds */}
-      <div className="bg-glow-top" />
-      <div className="bg-glow-bottom" />
-
+    <div>
       {/* Main Render Route switcher */}
       {currentUser === null || currentView === 'auth' ? (
         <AuthPage onLoginSuccess={handleLoginSuccess} />
@@ -167,7 +164,7 @@ export default function App() {
             onLogout={handleLogout}
           />
 
-          <main style={{ flexGrow: 1, padding: '16px 0' }}>
+          <main>
             {currentView === 'feed' && (
               <FeedView
                 currentUser={currentUser}
