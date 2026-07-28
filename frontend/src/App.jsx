@@ -7,30 +7,18 @@ import ExploreView from './components/ExploreView';
 import DestinationDetail from './components/DestinationDetail';
 import ProfileView from './components/ProfileView';
 import AddDestinationModal from './components/AddDestinationModal';
-import { AuthProvider, useAuth } from "./components/AuthContext";
+import { AuthProvider, useAuth } from './components/authcontext';
 
-
-import {
-  initialUsers,
-  initialProfiles,
-  initialTags,
-  initialDestinations,
-  initialReviews,
-  initialFollows
-} from './mockData';
-
-export default function App() {
-  // App-level State (Simulated Backend DB)
-  const [users, setUsers] = useState(initialUsers);
-  const [profiles, setProfiles] = useState(initialProfiles);
-  const [tags] = useState(initialTags);
-  const [destinations, setDestinations] = useState(initialDestinations);
-  const [reviews, setReviews] = useState(initialReviews);
-  const [follows, setFollows] = useState(initialFollows);
-  const {user , isAuthenticated, login , logout} = useAuth();
-
-  // Auth Session State
-  const [currentUser, setCurrentUser] = useState(users[0] || null); // Starts logged in as 'castle_explorer' or null
+function AppContent() {
+  // App-level State (empty by default; data will come from the API)
+  const [users, setUsers] = useState([]);
+  const [profiles, setProfiles] = useState([]);
+  const [tags] = useState([]);
+  const [destinations, setDestinations] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [follows, setFollows] = useState([]);
+  const { user, isAuthenticated, logout } = useAuth();
+  const currentUser = user;
 
   // Navigation State
   const [currentView, setCurrentView] = useState('feed');
@@ -40,43 +28,22 @@ export default function App() {
   const [navigationHistory, setNavigationHistory] = useState(['feed']);
 
   // Handle Auth States
-  const handleLoginSuccess = (userObj) => {
-    // Add user if they don't exist
-    const userExists = users.some(u => u.username === userObj.username);
-    if (!userExists) {
-      setUsers(prev => [...prev, { ...userObj, isCurrentUser: false }]);
-      // Create a profile for them
-      setProfiles(prev => [...prev, {
-        id: prev.length + 1,
-        userId: userObj.id,
-        bio: 'Welcome to my castle journal! Ready to explore and write reviews.',
-        picUrl: '',
-        created: new Date().toISOString()
-      }]);
-    }
-    
-    // Find the exact user object in state
-    const matchedUser = users.find(u => u.username === userObj.username) || userObj;
-    setCurrentUser(matchedUser);
-    handleViewChange('feed');
-  };
-
   const handleLogout = () => {
-    setCurrentUser(null);
+    logout();
     setCurrentView('auth');
     setNavigationHistory([]);
   };
 
   // Navigation Handlers
   const handleViewChange = (view, targetId = null) => {
-    setNavigationHistory(prev => [...prev, currentView]);
-    
+    setNavigationHistory((prev) => [...prev, currentView]);
+
     if (view === 'destination-detail') {
       setSelectedDestinationId(targetId);
     } else if (view === 'profile') {
       setSelectedUserId(targetId);
     }
-    
+
     setCurrentView(view);
   };
 
@@ -85,12 +52,11 @@ export default function App() {
       handleViewChange('feed');
       return;
     }
-    
+
     const history = [...navigationHistory];
     const prevView = history.pop();
     setNavigationHistory(history);
-    
-    // Reset selections depending on view we go back to
+
     if (prevView === 'destination-detail') {
       // Keep selected ID
     } else if (prevView === 'profile') {
@@ -99,17 +65,17 @@ export default function App() {
       setSelectedDestinationId(null);
       setSelectedUserId(null);
     }
-    
+
     setCurrentView(prevView);
   };
 
   // Business Logic Handlers
   const handleAddDestination = (newDest) => {
     const newId = destinations.reduce((max, d) => Math.max(max, d.id), 0) + 1;
-    setDestinations(prev => [
+    setDestinations((prev) => [
       {
         id: newId,
-        posted_by: currentUser.id,
+        posted_by: currentUser?.id ?? null,
         ...newDest
       },
       ...prev
@@ -118,7 +84,7 @@ export default function App() {
 
   const handleAddReview = (newReview) => {
     const newId = reviews.reduce((max, r) => Math.max(max, r.id), 0) + 1;
-    setReviews(prev => [
+    setReviews((prev) => [
       ...prev,
       {
         id: newId,
@@ -129,20 +95,20 @@ export default function App() {
 
   const handleFollowToggle = (targetUserId) => {
     const isFollowing = follows.some(
-      f => f.followerId === currentUser.id && f.followingId === targetUserId
+      (f) => f.followerId === currentUser?.id && f.followingId === targetUserId
     );
 
     if (isFollowing) {
-      setFollows(prev => prev.filter(
-        f => !(f.followerId === currentUser.id && f.followingId === targetUserId)
+      setFollows((prev) => prev.filter(
+        (f) => !(f.followerId === currentUser?.id && f.followingId === targetUserId)
       ));
     } else {
       const newId = follows.reduce((max, f) => Math.max(max, f.id), 0) + 1;
-      setFollows(prev => [
+      setFollows((prev) => [
         ...prev,
         {
           id: newId,
-          followerId: currentUser.id,
+          followerId: currentUser?.id ?? null,
           followingId: targetUserId
         }
       ]);
@@ -150,11 +116,9 @@ export default function App() {
   };
 
   return (
-  <AuthProvider>
     <div>
-      {/* Main Render Route switcher */}
-      {currentUser === null || currentView === 'auth' ? (
-        <AuthPage onLoginSuccess={handleLoginSuccess} />
+      {!isAuthenticated || currentView === 'auth' ? (
+        <AuthPage />
       ) : (
         <>
           <Navbar
@@ -230,6 +194,13 @@ export default function App() {
         </>
       )}
     </div>
-  </AuthProvider>
-);
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
 }

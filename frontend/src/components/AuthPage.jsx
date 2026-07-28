@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { Lock, Mail, User, Sparkles, ShieldCheck } from 'lucide-react';
+import { useAuth } from './authcontext';
+import { loginUser, registerUser } from '../api/authapi';
 
-export default function AuthPage({ onLoginSuccess }) {
+export default function AuthPage() {
+  const { login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -17,12 +21,20 @@ export default function AuthPage({ onLoginSuccess }) {
       return;
     }
 
-    // Mock Login/Register success
-    onLoginSuccess({
-      id: Math.floor(Math.random() * 1000) + 10,
-      username: username.toLowerCase().replace(/\s+/g, '_'),
-      email: email || `${username.toLowerCase()}@gloomvault.com`
-    });
+    setLoading(true);
+    try {
+      if (isLogin) {
+        await login({ username, password });
+      } else {
+        await registerUser({ username, email, password });
+        // Auto-login after successful registration
+        await login({ username, password });
+      }
+    } catch (err) {
+      setError(err?.response?.data?.detail || 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -113,15 +125,15 @@ export default function AuthPage({ onLoginSuccess }) {
             </div>
           </div>
 
-          <button type="submit">
-            {isLogin ? 'Sign In' : 'Create Account'}
+          <button type="submit" disabled={loading}>
+            {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
           </button>
         </form>
 
         {/* Info Footnote */}
         <div>
           <ShieldCheck size={14} />
-          <span>Local simulated session (no API connection)</span>
+          <span>Secured via JWT authentication</span>
         </div>
       </div>
     </div>
