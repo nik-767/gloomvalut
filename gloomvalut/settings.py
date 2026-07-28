@@ -1,3 +1,4 @@
+
 """
 Django settings for gloomvalut project.
 
@@ -13,6 +14,16 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 import sys
 from pathlib import Path
+import dj_database_url
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
+}
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,9 +51,7 @@ ALLOWED_HOSTS = os.environ.get(
 ).split(",")
 # Application definition
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://gloomvalut.onrender.com",
-]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -97,36 +106,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'gloomvalut.wsgi.application'
 
 
+
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DB_ENGINE = os.getenv('DB_ENGINE', 'sqlite').lower()
 
-if DB_ENGINE == 'postgres':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME', 'gloomvalut'),
-            'USER': os.getenv('DB_USER', 'postgres'),
-            'PASSWORD': os.getenv('DB_PASSWORD', 'nikki'),
-            'HOST': os.getenv('DB_HOST', 'db'),
-            'PORT': os.getenv('DB_PORT', '5432'),
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-
-if 'test' in sys.argv:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-
+# Database
+DATABASES = {
+    "default": dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=True,
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
