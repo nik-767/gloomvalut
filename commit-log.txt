@@ -24,3 +24,4 @@
 07/31/2026 23:28:08 - Create MainLayout component
 07/31/2026 23:28:08 - Move routing into AppRoutes
 07/31/2026 23:28:08 - Refactor App component
+07/31/2026 23:28:09 - Create Explore page
