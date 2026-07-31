@@ -1,17 +1,22 @@
 import React from 'react';
 import { Star, MessageSquare, Compass, UserPlus, Sparkles, Heart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useDestinations } from '../hooks/useDestinations';
+import { useReviews } from '../hooks/useReviews';
+import { useFollows } from '../hooks/useFollows';
+import { useAppData } from '../hooks/useAppData';
 
-export default function FeedView({ 
-  currentUser, 
-  users, 
-  destinations, 
-  reviews, 
-  follows, 
-  onFollowToggle, 
-  onSelectUser, 
-  onSelectDestination,
-  onNavigateToExplore 
-}) {
+export default function FeedView({ currentUser }) {
+  const { destinations } = useDestinations(currentUser);
+  const { reviews } = useReviews();
+  const { follows, handleFollowToggle } = useFollows(currentUser);
+  const { users } = useAppData();
+  
+  const navigate = useNavigate();
+  const onSelectUser = (id) => navigate(`/profile/${id}`);
+  const onSelectDestination = (id) => navigate(`/destination/${id}`);
+  const onNavigateToExplore = () => navigate('/explore');
+  const onFollowToggle = handleFollowToggle;
   // Get list of user IDs that current user follows
   const followedUserIds = follows
     .filter(f => f.followerId === currentUser?.id)

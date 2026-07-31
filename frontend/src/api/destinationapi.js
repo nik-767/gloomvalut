@@ -8,7 +8,7 @@ export const getDestinations = async () => {
 };
 
 // GET /api gloomvalut/api:id
-export const getdestination = async () => {
+export const getdestination = async (id) => {
     const response = await axiosInstance.get(`gloomvalutview/${id}`);
     return response.data;
 };

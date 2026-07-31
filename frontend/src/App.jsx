@@ -1,5 +1,5 @@
 /* Documented App view router states */
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import Navbar from './components/Navbar';
 import AuthPage from './components/AuthPage';
 import FeedView from './components/FeedView';
@@ -8,6 +8,7 @@ import DestinationDetail from './components/DestinationDetail';
 import ProfileView from './components/ProfileView';
 import AddDestinationModal from './components/AddDestinationModal';
 import { AuthProvider, useAuth } from './components/authcontext';
+import { getDestinations , createDestination } from "./api/destinationapi";
 
 function AppContent() {
   // App-level State (empty by default; data will come from the API)
@@ -15,6 +16,8 @@ function AppContent() {
   const [profiles, setProfiles] = useState([]);
   const [tags] = useState([]);
   const [destinations, setDestinations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [follows, setFollows] = useState([]);
   const { user, isAuthenticated, logout } = useAuth();
@@ -26,6 +29,20 @@ function AppContent() {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [navigationHistory, setNavigationHistory] = useState(['feed']);
+   
+  useEffect(() => {
+    const fetchDestination = async () => {
+      try {
+        const data = await getDestinations();
+
+        setDestinations(data);
+      } catch (error) {
+        console.error('failed to fetch destinations', error)
+      }
+    };
+    fetchDestination();
+  },[]); // an empty array runes only this when the app loads
+
 
   // Handle Auth States
   const handleLogout = () => {

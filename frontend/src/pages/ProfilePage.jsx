@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import { UserPlus, UserMinus, Compass, MessageSquare, Star, ArrowLeft, Calendar } from 'lucide-react';
-import DestinationCard from './DestinationCard';
+import { useParams, useNavigate } from 'react-router-dom';
+import DestinationCard from '../components/destination/DestinationCard';
+import { useDestinations } from '../hooks/useDestinations';
+import { useReviews } from '../hooks/useReviews';
+import { useFollows } from '../hooks/useFollows';
+import { useAppData } from '../hooks/useAppData';
 
-export default function ProfileView({ 
-  userId, 
-  users, 
-  profiles, 
-  destinations, 
-  reviews, 
-  follows, 
-  currentUser, 
-  onFollowToggle, 
-  onSelectDestination, 
-  onSelectUser,
-  onBack 
-}) {
+export default function ProfileView({ currentUser }) {
+  const { id } = useParams();
+  const userId = parseInt(id);
+  const navigate = useNavigate();
+
+  const { destinations } = useDestinations(currentUser);
+  const { reviews } = useReviews();
+  const { follows, handleFollowToggle } = useFollows(currentUser);
+  const { users, profiles } = useAppData();
+
+  const onBack = () => navigate(-1);
+  const onSelectDestination = (destId) => navigate(`/destination/${destId}`);
+  const onSelectUser = (uId) => navigate(`/profile/${uId}`);
+  const onFollowToggle = handleFollowToggle;
   const [activeTab, setActiveTab] = useState('destinations');
 
   const user = users.find(u => u.id === userId);

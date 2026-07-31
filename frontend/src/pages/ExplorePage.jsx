@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Search, Plus, Compass } from 'lucide-react';
-import DestinationCard from './DestinationCard';
+import { useNavigate } from 'react-router-dom';
+import DestinationCard from '../components/destination/DestinationCard';
+import { useDestinations } from '../hooks/useDestinations';
+import { useAppData } from '../hooks/useAppData';
 
-export default function ExploreView({ 
-  destinations, 
-  users, 
-  tags, 
-  onSelectDestination, 
-  onSelectUser, 
-  onOpenAddModal 
-}) {
+export default function ExploreView({ onOpenAddModal }) {
+  const { destinations } = useDestinations(null);
+  const { users, tags } = useAppData();
+  const navigate = useNavigate();
+
+  const onSelectDestination = (id) => navigate(`/destination/${id}`);
+  const onSelectUser = (id) => navigate(`/profile/${id}`);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTagId, setSelectedTagId] = useState(null);
 

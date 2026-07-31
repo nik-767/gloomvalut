@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Star, MessageSquare, MapPin, User, Send } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useDestinations } from '../hooks/useDestinations';
+import { useReviews } from '../hooks/useReviews';
+import { useAppData } from '../hooks/useAppData';
 
-export default function DestinationDetail({ 
-  destinationId, 
-  destinations, 
-  users, 
-  tags, 
-  reviews, 
-  currentUser, 
-  onAddReview, 
-  onBack, 
-  onSelectUser 
-}) {
+export default function DestinationDetail({ currentUser }) {
+  const { id } = useParams();
+  const destinationId = parseInt(id);
+  const navigate = useNavigate();
+
+  const { destinations } = useDestinations(currentUser);
+  const { reviews, handleAddReview } = useReviews();
+  const { users, tags } = useAppData();
+
+  const onBack = () => navigate(-1);
+  const onSelectUser = (userId) => navigate(`/profile/${userId}`);
+  const onAddReview = handleAddReview;
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(5);
   const [formError, setFormError] = useState('');
