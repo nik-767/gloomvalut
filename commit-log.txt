@@ -19,3 +19,4 @@
 07/31/2026 23:28:07 - Add custom hooks directory
 07/31/2026 23:28:07 - Implement useDestinations hook
 07/31/2026 23:28:07 - Implement useReviews hook
+07/31/2026 23:28:07 - Implement useFollows hook
