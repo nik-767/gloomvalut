@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Lock, Mail, User, Sparkles, ShieldCheck } from 'lucide-react';
-import { useAuth } from './authcontext';
-import { loginUser, registerUser } from '../api/authapi';
+import { useAuth } from '../context/AuthContext';
+import { login, registerUser } from '../api/authapi';
 
 export default function AuthPage() {
   const { login } = useAuth();
