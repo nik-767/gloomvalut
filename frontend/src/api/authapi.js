@@ -22,7 +22,7 @@ const normalizeAuthPayload = (data = {}) => {
  * Registers a new guild member and returns the backend response with JWT tokens.
  */
 export const registerUser = async (userData) => {
-  const response = await api.post('register/', normalizeAuthPayload(userData));
+  const response = await api.post('/register/', normalizeAuthPayload(userData));
   return response.data;
 };
 
