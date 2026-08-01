@@ -14,7 +14,6 @@ import os
 import dj_database_url
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -53,7 +52,6 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-allowed_hosts = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0')
 
 import os
 
@@ -91,12 +89,16 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'https://gloomvalut.onrender.com',
     'http://localhost:5173',
-    "http://127.0.0.1:5173"
+    "http://127.0.0.1:5173",
+    "https://your-project.vercel.app"  # <-- replace with your actual Vercel URL
+
 ]
 CSRF_TRUSTED_ORIGINS = [
     'https://gloomvalut.onrender.com',
     'http://localhost:5173',
-    "http://127.0.0.1:5173"
+    "http://127.0.0.1:5173",
+    "https://your-project.vercel.app",
+
 ]
 ROOT_URLCONF = 'gloomvalut.urls'
 
@@ -175,3 +177,4 @@ REST_FRAMEWORK = {
     )
     
 }
+DEBUG = False
