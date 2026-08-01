@@ -89,6 +89,15 @@ class FollowCountsTests(APITestCase):
         self.assertEqual(data['followers_count'], 1)
         self.assertEqual(data['following_count'], 0)
 
+    def test_profile_api_patch(self):
+        self.client.force_authenticate(user=self.user1)
+        response = self.client.patch(
+            reverse('profile_API', kwargs={'user_id': self.user1.id}),
+            {'bio': 'New Bio!'}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['bio'], 'New Bio!')
+
     def test_follow_api_keys(self):
         # Force authentication for DRF API view
         self.client.force_authenticate(user=self.user1)
