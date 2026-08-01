@@ -1,3 +1,5 @@
+import os
+
 from rest_framework import serializers
 from .models import Destination , Review , Profile , Follow , Tag
 from django.contrib.auth.models import User
@@ -9,11 +11,28 @@ class TagSerializer(serializers.ModelSerializer):
 
 class gloomvalutseralizer(serializers.ModelSerializer):
     tags_detail = TagSerializer(source='tags', many=True, read_only=True)
-    posted_by_username = serializers.CharField(source='posted_by.username', read_only=True, allow_null=True)
+    posted_by_username = serializers.CharField(
+        source='posted_by.username',
+        read_only=True,
+        allow_null=True
+    )
+
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Destination
         fields = "__all__"
+
+    def get_image(self, obj):
+        if not obj.image:
+            return None
+
+        request = self.context.get("request")
+        filename = os.path.basename(obj.image.name)
+
+        return request.build_absolute_uri(
+            f"/static/core/{filename}"
+        )
 
 class Registerseralizer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
