@@ -9,3 +9,5 @@ env/
 .gitignore
 media/
 staticfiles/
+frontend/node_modules/
+frontend/dist/
