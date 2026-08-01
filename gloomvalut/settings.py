@@ -88,17 +88,28 @@ MIDDLEWARE = [
 ]
 CORS_ALLOWED_ORIGINS = [
     'https://gloomvalut.onrender.com',
+    'https://gloomvalut.vercel.app',
     'http://localhost:5173',
-    "http://127.0.0.1:5173",
-    "https://your-project.vercel.app"  # <-- replace with your actual Vercel URL
-
+    'http://127.0.0.1:5173',
+]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https://.*\.vercel\.app$',
 ]
 CSRF_TRUSTED_ORIGINS = [
     'https://gloomvalut.onrender.com',
+    'https://gloomvalut.vercel.app',
     'http://localhost:5173',
-    "http://127.0.0.1:5173",
-    "https://your-project.vercel.app",
-
+    'http://127.0.0.1:5173',
+]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'origin',
+    'x-csrftoken',
+    'x-requested-with',
 ]
 ROOT_URLCONF = 'gloomvalut.urls'
 
