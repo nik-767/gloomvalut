@@ -1,52 +1,67 @@
-import api from "./axios";
+import api from './axios';
+import { getUserIdFromToken } from '../utils/jwt';
 
+/**
+ * Trims auth payload strings before sending them to Django.
+ */
 const normalizeAuthPayload = (data = {}) => {
-    const payload = { ...data };
+  const payload = { ...data };
 
-    if (typeof payload.username === 'string') {
-        payload.username = payload.username.trim();
-    }
+  if (typeof payload.username === 'string') {
+    payload.username = payload.username.trim();
+  }
 
-    if (typeof payload.email === 'string') {
-        payload.email = payload.email.trim();
-    }
+  if (typeof payload.email === 'string') {
+    payload.email = payload.email.trim();
+  }
 
-    return payload;
+  return payload;
 };
 
+/**
+ * Registers a new guild member and returns the backend response with JWT tokens.
+ */
 export const registerUser = async (userData) => {
-    const response = await api.post("register/", normalizeAuthPayload(userData));
-    return response.data;
+  const response = await api.post('register/', normalizeAuthPayload(userData));
+  return response.data;
 };
 
+/**
+ * Logs a user in and returns access/refresh tokens from Simple JWT.
+ */
 export const loginUser = async (credentials) => {
-    const response = await api.post("login/", normalizeAuthPayload(credentials));
-    return response.data;
+  const response = await api.post('login/', normalizeAuthPayload(credentials));
+  return response.data;
 };
 
+/**
+ * Requests a fresh access token using the stored refresh token.
+ */
 export const refreshToken = async (refresh) => {
-    const response = await api.post("token/refresh/", {
-        refresh,
-    });
-
-    return response.data;
+  const response = await api.post('token/refresh/', { refresh });
+  return response.data;
 };
 
-export const getCurrentUser = async (fallbackUser = null) => {
-    const storedUser = localStorage.getItem("current_user");
+/**
+ * Rebuilds the current user object from localStorage and the JWT payload.
+ */
+export const getCurrentUser = async () => {
+  const storedUser = localStorage.getItem('current_user');
+  const accessToken = localStorage.getItem('access_token');
+  const tokenUserId = getUserIdFromToken(accessToken);
 
-    if (storedUser) {
-        return JSON.parse(storedUser);
-    }
-
-    if (fallbackUser) {
-        return fallbackUser;
-    }
+  if (storedUser) {
+    const parsedUser = JSON.parse(storedUser);
 
     return {
-        id: null,
-        username: "Guest",
+      ...parsedUser,
+      id: parsedUser.id ?? tokenUserId,
     };
+  }
+
+  return {
+    id: tokenUserId,
+    username: 'Guest',
+    email: '',
+  };
 };
-
-
