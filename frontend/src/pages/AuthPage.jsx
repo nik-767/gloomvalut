@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Lock, Mail, User, Sparkles, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { login, registerUser } from '../api/authapi';
+import { loginUser, registerUser } from '../api/authapi';
 
 export default function AuthPage() {
   const { login } = useAuth();
@@ -16,22 +16,41 @@ export default function AuthPage() {
     e.preventDefault();
     setError('');
 
-    if (!username || !password || (!isLogin && !email)) {
+    const trimmedUsername = username.trim();
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password;
+
+    if (!trimmedUsername || !trimmedPassword || (!isLogin && !trimmedEmail)) {
       setError('Please fill in all fields.');
+      return;
+    }
+
+    if (!isLogin && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      setError('Please enter a valid email address.');
       return;
     }
 
     setLoading(true);
     try {
       if (isLogin) {
-        await login({ username, password });
+        await login({ username: trimmedUsername, password: trimmedPassword });
       } else {
-        await registerUser({ username, email, password });
-        // Auto-login after successful registration
-        await login({ username, password });
+        await registerUser({ username: trimmedUsername, email: trimmedEmail, password: trimmedPassword });
+        await login({ username: trimmedUsername, password: trimmedPassword });
       }
     } catch (err) {
-      setError(err?.response?.data?.detail || 'Something went wrong. Please try again.');
+      const backendMessage = err?.response?.data;
+      const detail =
+        backendMessage?.detail ||
+        backendMessage?.message ||
+        backendMessage?.error ||
+        (typeof backendMessage === 'string' ? backendMessage : null) ||
+        (backendMessage?.username?.[0]) ||
+        (backendMessage?.email?.[0]) ||
+        (backendMessage?.password?.[0]) ||
+        'Something went wrong. Please try again.';
+
+      setError(detail);
     } finally {
       setLoading(false);
     }

@@ -6,24 +6,27 @@ import { useDestinations } from '../hooks/useDestinations';
 import { useAppData } from '../hooks/useAppData';
 
 export default function ExploreView({ onOpenAddModal }) {
-  const { destinations } = useDestinations(null);
+  const {
+    destinations,
+    loading,
+    error,
+  } = useDestinations();
+
   const { users, tags } = useAppData();
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTagId, setSelectedTagId] = useState(null);
 
   const onSelectDestination = (id) => navigate(`/destination/${id}`);
   const onSelectUser = (id) => navigate(`/profile/${id}`);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTagId, setSelectedTagId] = useState(null);
+  const filteredDestinations = destinations.filter((dest) => {
+    const matchesSearch = !searchQuery ||
+      dest.castle?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      dest.country?.toLowerCase().includes(searchQuery.toLowerCase());
 
-  // Filter logic
-  const filteredDestinations = destinations.filter(dest => {
-    const matchesSearch = 
-      dest.castle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      dest.country.toLowerCase().includes(searchQuery.toLowerCase());
-      
-    const matchesTag = selectedTagId ? dest.tagIds?.includes(selectedTagId) : true;
-    
+    const matchesTag = !selectedTagId || dest.tagIds?.includes(selectedTagId);
+
     return matchesSearch && matchesTag;
   });
 
@@ -76,6 +79,9 @@ export default function ExploreView({ onOpenAddModal }) {
           </button>
         ))}
       </div>
+
+      {loading && <p>Loading destinations...</p>}
+      {error && <p>{error}</p>}
 
       {/* Grid List */}
       {filteredDestinations.length > 0 ? (
