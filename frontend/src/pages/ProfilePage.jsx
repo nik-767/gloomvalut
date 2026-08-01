@@ -1,5 +1,14 @@
-import React, { useState } from 'react';
-import { UserPlus, UserMinus, Compass, MessageSquare, Star, ArrowLeft, Calendar } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import {
+  UserPlus,
+  UserMinus,
+  Compass,
+  MessageSquare,
+  Star,
+  ArrowLeft,
+  Calendar,
+  Save,
+} from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DestinationCard from '../components/destination/DestinationCard';
 import { useDestinations } from '../hooks/useDestinations';
@@ -7,74 +16,138 @@ import { useReviews } from '../hooks/useReviews';
 import { useFollows } from '../hooks/useFollows';
 import { useAppData } from '../hooks/useAppData';
 
-export default function ProfileView({ currentUser }) {
+/**
+ * Displays a public explorer profile, their posts, reviews, and follow controls.
+ */
+export default function ProfilePage({ currentUser }) {
   const { id } = useParams();
-  const userId = parseInt(id);
+  const userId = parseInt(id, 10);
   const navigate = useNavigate();
 
-  const { destinations } = useDestinations(currentUser);
+  const { destinations } = useDestinations();
   const { reviews } = useReviews();
-  const { follows, handleFollowToggle } = useFollows(currentUser);
-  const { users, profiles } = useAppData();
+  const { follows, handleFollowToggle } = useFollows();
+  const { users, profileCache, loadProfile, handleUpdateProfile } = useAppData();
 
-  const onBack = () => navigate(-1);
-  const onSelectDestination = (destId) => navigate(`/destination/${destId}`);
-  const onSelectUser = (uId) => navigate(`/profile/${uId}`);
-  const onFollowToggle = handleFollowToggle;
   const [activeTab, setActiveTab] = useState('destinations');
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [profileError, setProfileError] = useState('');
+  const [bioDraft, setBioDraft] = useState('');
+  const [savingBio, setSavingBio] = useState(false);
 
-  const user = users.find(u => u.id === userId);
-  if (!user) return <div>User not found.</div>;
+  const cachedProfile = profileCache[userId];
+  const user = users.find((item) => item.id === userId);
+  const profile = cachedProfile?.profile;
+  const isOwnProfile = userId === currentUser?.id;
 
-  const profile = profiles.find(p => p.userId === user.id) || { bio: 'No biography provided yet.', created: new Date().toISOString() };
-  const userDestinations = destinations.filter(d => d.posted_by === user.id);
-  const userReviews = reviews.filter(r => r.userId === user.id);
+  useEffect(() => {
+    /** Loads profile stats and posts whenever the route user id changes. */
+    const fetchProfile = async () => {
+      setLoadingProfile(true);
+      setProfileError('');
 
-  const isOwnProfile = user.id === currentUser?.id;
+      try {
+        await loadProfile(userId);
+      } catch (err) {
+        setProfileError(err.message || 'Failed to load profile.');
+      } finally {
+        setLoadingProfile(false);
+      }
+    };
 
-  // Follow statistics calculation
-  const followerCount = follows.filter(f => f.followingId === user.id).length;
-  const followingCount = follows.filter(f => f.followerId === user.id).length;
-  const isFollowing = follows.some(f => f.followerId === currentUser?.id && f.followingId === user.id);
+    fetchProfile();
+  }, [userId, loadProfile]);
 
-  // Formatting date
+  useEffect(() => {
+    if (profile?.bio) {
+      setBioDraft(profile.bio);
+    }
+  }, [profile?.bio]);
+
+  if (loadingProfile) {
+    return (
+      <div className="gv-page">
+        <p className="gv-loading">Reading profile from the vault...</p>
+      </div>
+    );
+  }
+
+  if (profileError || !profile) {
+    return (
+      <div className="gv-page">
+        <div className="gv-empty gv-card">
+          <p>{profileError || 'User not found.'}</p>
+          <button className="gv-btn" type="button" onClick={() => navigate('/explore')}>
+            Back to Explore
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const userDestinations = cachedProfile?.userPosts?.length
+    ? cachedProfile.userPosts
+    : destinations.filter((destination) => destination.posted_by === profile.userId);
+
+  const userReviews = reviews.filter((review) => review.userId === profile.userId);
+  const followerCount =
+    cachedProfile?.followersCount ??
+    follows.filter((follow) => follow.followingId === profile.userId).length;
+  const followingCount =
+    cachedProfile?.followingCount ??
+    follows.filter((follow) => follow.followerId === profile.userId).length;
+  const isFollowing =
+    cachedProfile?.isFollowing ??
+    follows.some(
+      (follow) => follow.followerId === currentUser?.id && follow.followingId === profile.userId
+    );
+
+  /** Formats an ISO date into a readable joined date string. */
   const formatDate = (isoString) => {
     try {
-      const date = new Date(isoString);
-      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      return new Date(isoString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
     } catch {
       return 'Unknown';
     }
   };
 
+  /** Saves the signed-in user's biography through the profile API. */
+  const handleSaveBio = async () => {
+    setSavingBio(true);
+
+    try {
+      await handleUpdateProfile(userId, { bio: bioDraft });
+    } catch (err) {
+      setProfileError(err.message || 'Failed to update profile.');
+    } finally {
+      setSavingBio(false);
+    }
+  };
+
   return (
-    <div>
-      {/* Back Button if not own profile */}
-      {!isOwnProfile && onBack && (
-        <button onClick={onBack}>
+    <div className="gv-page">
+      {!isOwnProfile && (
+        <button className="gv-btn gv-btn-ghost" type="button" onClick={() => navigate(-1)}>
           <ArrowLeft size={16} />
           <span>Back</span>
         </button>
       )}
 
-      {/* Profile Info Header */}
-      <div>
-        <div>
-          {/* Avatar */}
-          <div>
-            {user.username.substring(0, 2).toUpperCase()}
+      <section className="gv-card gv-card-body" style={{ marginTop: '1rem' }}>
+        <div className="gv-feed-meta">
+          <div className="gv-avatar" style={{ width: '4rem', height: '4rem' }}>
+            {profile.username ? profile.username.substring(0, 2).toUpperCase() : '??'}
           </div>
 
-          {/* Core Info */}
-          <div>
-            <div>
-              <h1>
-                {user.username}
-              </h1>
-              
-              {/* Follow / Unfollow Button */}
+          <div style={{ flex: 1 }}>
+            <div className="gv-field-inline" style={{ justifyContent: 'space-between' }}>
+              <h1>{profile.username}</h1>
               {!isOwnProfile && (
-                <button onClick={() => onFollowToggle?.(user.id)}>
+                <button className="gv-btn" type="button" onClick={() => handleFollowToggle(profile.userId)}>
                   {isFollowing ? (
                     <>
                       <UserMinus size={14} />
@@ -90,104 +163,119 @@ export default function ProfileView({ currentUser }) {
               )}
             </div>
 
-            <div>
+            <div className="gv-field-inline gv-stat-row">
               <Calendar size={14} />
-              <span>Joined {formatDate(profile.created)}</span>
+              <span>Joined {formatDate(profile?.created)}</span>
             </div>
 
-            <p>
-              {profile.bio}
-            </p>
+            {isOwnProfile ? (
+              <>
+                <div className="gv-field" style={{ marginTop: '1rem' }}>
+                  <label>Bio</label>
+                  <textarea
+                    className="gv-textarea"
+                    rows={3}
+                    value={bioDraft}
+                    onChange={(event) => setBioDraft(event.target.value)}
+                  />
+                </div>
+                <button
+                  className="gv-btn gv-btn-primary"
+                  type="button"
+                  onClick={handleSaveBio}
+                  disabled={savingBio}
+                >
+                  <Save size={16} />
+                  <span>{savingBio ? 'Saving...' : 'Save Bio'}</span>
+                </button>
+              </>
+            ) : (
+              <p style={{ marginTop: '1rem' }}>{profile?.bio || 'No biography provided yet.'}</p>
+            )}
           </div>
         </div>
 
-        {/* Stats Row */}
-        <div>
-          <div>
-            <div>{userDestinations.length}</div>
-            <div>Castles</div>
+        <div className="gv-stat-grid">
+          <div className="gv-stat-box">
+            <strong>{userDestinations.length}</strong>
+            <span>Castles</span>
           </div>
-          <div>
-            <div>{userReviews.length}</div>
-            <div>Reviews</div>
+          <div className="gv-stat-box">
+            <strong>{userReviews.length}</strong>
+            <span>Reviews</span>
           </div>
-          <div>
-            <div>{followerCount}</div>
-            <div>Followers</div>
+          <div className="gv-stat-box">
+            <strong>{followerCount}</strong>
+            <span>Followers</span>
           </div>
-          <div>
-            <div>{followingCount}</div>
-            <div>Following</div>
+          <div className="gv-stat-box">
+            <strong>{followingCount}</strong>
+            <span>Following</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Tabs Menu */}
-      <div>
-        <button onClick={() => setActiveTab('destinations')}>
+      <div className="gv-tabs">
+        <button
+          type="button"
+          className={`gv-tab ${activeTab === 'destinations' ? 'active' : ''}`}
+          onClick={() => setActiveTab('destinations')}
+        >
           <Compass size={16} />
           <span>Destinations Posted</span>
         </button>
-
-        <button onClick={() => setActiveTab('reviews')}>
+        <button
+          type="button"
+          className={`gv-tab ${activeTab === 'reviews' ? 'active' : ''}`}
+          onClick={() => setActiveTab('reviews')}
+        >
           <MessageSquare size={16} />
           <span>Reviews Left</span>
         </button>
       </div>
 
-      {/* Tab Panels */}
       {activeTab === 'destinations' ? (
         userDestinations.length > 0 ? (
-          <div>
-            {userDestinations.map(dest => (
+          <div className="gv-grid-cards">
+            {userDestinations.map((destination) => (
               <DestinationCard
-                key={dest.id}
-                destination={dest}
-                onSelect={() => onSelectDestination?.(dest.id)}
+                key={destination.id}
+                destination={destination}
+                onSelect={() => navigate(`/destination/${destination.id}`)}
               />
             ))}
           </div>
         ) : (
-          <div>
-            No castle destinations posted yet.
-          </div>
+          <div className="gv-empty gv-card">No castle destinations posted yet.</div>
         )
-      ) : (
-        userReviews.length > 0 ? (
-          <div>
-            {userReviews.map(rev => {
-              const castleObj = destinations.find(d => d.id === rev.destinationId);
-              return (
-                <div 
-                  key={rev.id} 
-                  onClick={() => castleObj && onSelectDestination?.(castleObj.id)}
-                >
-                  <div>
-                    <h3>
-                      {castleObj ? castleObj.castle : 'Unknown Castle'}
-                    </h3>
-                    <div>
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star 
-                          key={i} 
-                          size={12} 
-                          fill={i < rev.rating ? 'currentColor' : 'transparent'} 
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <p>
-                    "{rev.comment}"
-                  </p>
+      ) : userReviews.length > 0 ? (
+        userReviews.map((review) => {
+          const castle = destinations.find((destination) => destination.id === review.destinationId);
+
+          return (
+            <article
+              key={review.id}
+              className="gv-card gv-review-item gv-card-clickable"
+              onClick={() => castle && navigate(`/destination/${castle.id}`)}
+            >
+              <div className="gv-review-meta">
+                <h3>{castle?.castle || review.destinationName || 'Unknown Castle'}</h3>
+                <div className="gv-star-row">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <Star
+                      key={index}
+                      size={12}
+                      fill={index < review.rating ? 'currentColor' : 'transparent'}
+                    />
+                  ))}
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div>
-            No reviews written yet.
-          </div>
-        )
+              </div>
+              <p>&ldquo;{review.comment}&rdquo;</p>
+            </article>
+          );
+        })
+      ) : (
+        <div className="gv-empty gv-card">No reviews written yet.</div>
       )}
     </div>
   );
