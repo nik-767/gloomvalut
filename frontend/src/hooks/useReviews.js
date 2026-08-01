@@ -1,18 +1,20 @@
-import { useState } from 'react';
+import { useAppDataContext } from '../context/AppDataContext';
 
+/**
+ * Backward-compatible hook that exposes review actions from shared app data.
+ */
 export const useReviews = () => {
-  const [reviews, setReviews] = useState([]);
+  const {
+    reviews,
+    handleAddReview,
+    handleDeleteReview,
+  } = useAppDataContext();
 
-  const handleAddReview = (newReview) => {
-    const newId = reviews.reduce((max, r) => Math.max(max, r.id), 0) + 1;
-    setReviews((prev) => [
-      ...prev,
-      {
-        id: newId,
-        ...newReview
-      }
-    ]);
+  return {
+    reviews,
+    handleAddReview,
+    handleDeleteReview,
   };
-
-  return { reviews, setReviews, handleAddReview };
 };
+
+export default useReviews;
