@@ -1,73 +1,62 @@
 import React from 'react';
 import { Star, MapPin, User } from 'lucide-react';
 
+/**
+ * Renders a compact castle card used on Explore and Profile pages.
+ */
 export default function DestinationCard({ destination, creator, tags = [], onSelect, onSelectCreator }) {
-  // Truncate description for card preview
   const truncateText = (text, maxLength) => {
-    if (!text) return '';
+    if (!text) {
+      return '';
+    }
+
     return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
   };
 
   return (
-    <div onClick={onSelect}>
-      {/* Castle Image */}
-      <div>
-        <img 
-          src={destination.imageUrl || 'https://images.unsplash.com/photo-1599875953199-198967929424?auto=format&fit=crop&w=800&q=80'} 
-          alt={destination.castle} 
-        />
-        
-        {/* Rating Badge */}
-        <div>
-          <div>
-            <Star size={14} />
-            <span>{destination.atmosphere?.toFixed(1)}</span>
-          </div>
+    <article className="gv-card gv-card-clickable" onClick={onSelect}>
+      <div className="gv-card-image-wrap">
+        <img src={destination.imageUrl} alt={destination.castle} />
+        <div className="gv-badge">
+          <Star size={14} />
+          <span>{destination.atmosphere?.toFixed(1)}</span>
         </div>
       </div>
 
-      {/* Card Content */}
-      <div>
-        {/* Castle Name and Country */}
-        <div>
-          <h3>
-            {destination.castle}
-          </h3>
-          <div>
-            <MapPin size={12} />
-            <span>{destination.country}</span>
+      <div className="gv-card-body">
+        <h3>{destination.castle}</h3>
+        <div className="gv-field-inline" style={{ color: 'var(--gv-muted)' }}>
+          <MapPin size={12} />
+          <span>{destination.country}</span>
+        </div>
+
+        {tags.length > 0 && (
+          <div className="gv-tag-row">
+            {tags.map((tag) => (
+              <span key={tag.id} className="gv-tag">
+                #{tag.name}
+              </span>
+            ))}
           </div>
-        </div>
+        )}
 
-        {/* Tags */}
-        <div>
-          {tags.map(tag => (
-            <span key={tag.id}>
-              #{tag.name}
-            </span>
-          ))}
-        </div>
+        <p>{truncateText(destination.description, 120)}</p>
 
-        {/* Description */}
-        <p>
-          {truncateText(destination.description, 120)}
-        </p>
-
-        {/* Poster Info (Footer) */}
         {creator && (
-          <div 
-            onClick={(e) => {
-              e.stopPropagation(); // Avoid triggering card click
+          <div
+            className="gv-field-inline gv-link"
+            onClick={(event) => {
+              event.stopPropagation();
               onSelectCreator?.(creator.id);
             }}
           >
-            <div>
-              {creator.username.substring(0, 2).toUpperCase()}
-            </div>
-            <span>Posted by <strong>{creator.username}</strong></span>
+            <div className="gv-avatar">{creator.username.substring(0, 2).toUpperCase()}</div>
+            <span>
+              Posted by <strong>{creator.username}</strong>
+            </span>
           </div>
         )}
       </div>
-    </div>
+    </article>
   );
 }
