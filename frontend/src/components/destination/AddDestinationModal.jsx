@@ -1,32 +1,33 @@
 import React, { useState } from 'react';
-import { X, Globe, Building, Image, Star, Plus } from 'lucide-react';
+import { X, Globe, Building, Star, Plus, Upload } from 'lucide-react';
 
-const IMAGE_PRESETS = [
-  { name: 'Gothic Castle', url: 'https://images.unsplash.com/photo-1508849789987-4e5333c12b78?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Mountain Palace', url: 'https://images.unsplash.com/photo-1460574283810-2aab119d8511?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Island Abbey', url: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Coastal Ruins', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80' }
-];
-
+/**
+ * Modal form for posting a new castle destination to the vault API.
+ */
 export default function AddDestinationModal({ isOpen, onClose, tags = [], onAddDestination }) {
   const [castleName, setCastleName] = useState('');
   const [country, setCountry] = useState('');
   const [description, setDescription] = useState('');
   const [atmosphere, setAtmosphere] = useState(4.5);
   const [selectedTagIds, setSelectedTagIds] = useState([]);
-  const [selectedImageUrl, setSelectedImageUrl] = useState(IMAGE_PRESETS[0].url);
+  const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
+  /** Adds or removes a tag id from the selected tag list. */
   const handleTagToggle = (tagId) => {
-    setSelectedTagIds(prev => 
-      prev.includes(tagId) ? prev.filter(id => id !== tagId) : [...prev, tagId]
+    setSelectedTagIds((prev) =>
+      prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]
     );
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  /** Validates the form and sends the destination payload to the parent handler. */
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setError('');
 
     if (!castleName.trim() || !country.trim() || !description.trim()) {
@@ -34,97 +35,95 @@ export default function AddDestinationModal({ isOpen, onClose, tags = [], onAddD
       return;
     }
 
-    onAddDestination({
-      castle: castleName.trim(),
-      country: country.trim(),
-      description: description.trim(),
-      atmosphere: parseFloat(atmosphere),
-      tagIds: selectedTagIds,
-      imageUrl: selectedImageUrl
-    });
+    setSubmitting(true);
 
-    // Reset Form
-    setCastleName('');
-    setCountry('');
-    setDescription('');
-    setAtmosphere(4.5);
-    setSelectedTagIds([]);
-    onClose();
+    try {
+      await onAddDestination({
+        castle: castleName.trim(),
+        country: country.trim(),
+        description: description.trim(),
+        atmosphere: parseFloat(atmosphere),
+        tagIds: selectedTagIds,
+        imageFile,
+      });
+
+      setCastleName('');
+      setCountry('');
+      setDescription('');
+      setAtmosphere(4.5);
+      setSelectedTagIds([]);
+      setImageFile(null);
+      onClose();
+    } catch (err) {
+      setError(
+        err.response?.data?.detail ||
+          err.response?.data?.castle?.[0] ||
+          err.message ||
+          'Failed to create destination.'
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <div>
-      <div>
-        {/* Header */}
-        <div>
+    <div className="gv-modal-overlay" onClick={onClose}>
+      <div className="gv-card gv-modal" onClick={(event) => event.stopPropagation()}>
+        <div className="gv-modal-header">
           <h2>
             <Building size={20} />
-            <span>Add Castle Destination</span>
+            <span> Add Castle Destination</span>
           </h2>
-          <button onClick={onClose}>
+          <button className="gv-btn gv-btn-ghost" onClick={onClose} type="button">
             <X size={18} />
           </button>
         </div>
 
-        {/* Form Body */}
-        <div>
-          {error && (
-            <div>
-              {error}
-            </div>
-          )}
+        <div className="gv-modal-body">
+          {error && <div className="gv-alert">{error}</div>}
 
           <form onSubmit={handleSubmit}>
-            {/* Castle Name */}
-            <div>
-              <label>
-                Castle Name *
-              </label>
-              <div>
+            <div className="gv-field">
+              <label>Castle Name *</label>
+              <div className="gv-field-inline gv-searchbar">
                 <Building size={16} />
                 <input
                   type="text"
                   placeholder="e.g. Neuschwanstein Castle"
                   value={castleName}
-                  onChange={(e) => setCastleName(e.target.value)}
+                  onChange={(event) => setCastleName(event.target.value)}
                 />
               </div>
             </div>
 
-            {/* Country */}
-            <div>
-              <label>
-                Country *
-              </label>
-              <div>
+            <div className="gv-field">
+              <label>Country *</label>
+              <div className="gv-field-inline gv-searchbar">
                 <Globe size={16} />
                 <input
                   type="text"
                   placeholder="e.g. Germany"
                   value={country}
-                  onChange={(e) => setCountry(e.target.value)}
+                  onChange={(event) => setCountry(event.target.value)}
                 />
               </div>
             </div>
 
-            {/* Description */}
-            <div>
-              <label>
-                Description *
-              </label>
+            <div className="gv-field">
+              <label>Description *</label>
               <textarea
+                className="gv-textarea"
                 placeholder="Describe the castle, history, architecture and surrounding area..."
                 rows={4}
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(event) => setDescription(event.target.value)}
               />
             </div>
 
-            {/* Atmosphere Slider */}
-            <div>
-              <div>
+            <div className="gv-field">
+              <div className="gv-field-inline" style={{ justifyContent: 'space-between' }}>
                 <span>Atmosphere Rating *</span>
-                <strong>
+                <strong className="gv-star-row">
                   <Star size={12} /> {atmosphere}
                 </strong>
               </div>
@@ -134,62 +133,52 @@ export default function AddDestinationModal({ isOpen, onClose, tags = [], onAddD
                 max="5"
                 step="0.1"
                 value={atmosphere}
-                onChange={(e) => setAtmosphere(parseFloat(e.target.value))}
+                onChange={(event) => setAtmosphere(parseFloat(event.target.value))}
               />
             </div>
 
-            {/* Select Tags */}
-            <div>
-              <label>
-                Castle Tags (Select multiple)
-              </label>
-              <div>
-                {tags.map(tag => {
-                  const isSelected = selectedTagIds.includes(tag.id);
-                  return (
-                    <button
-                      key={tag.id}
-                      type="button"
-                      onClick={() => handleTagToggle(tag.id)}
-                    >
-                      {isSelected ? '[x] ' : '[ ] '}#{tag.name}
-                    </button>
-                  );
-                })}
+            {tags.length > 0 && (
+              <div className="gv-field">
+                <label>Castle Tags</label>
+                <div className="gv-filter-row">
+                  {tags.map((tag) => {
+                    const isSelected = selectedTagIds.includes(tag.id);
+                    return (
+                      <button
+                        key={tag.id}
+                        type="button"
+                        className={`gv-filter-btn ${isSelected ? 'active' : ''}`}
+                        onClick={() => handleTagToggle(tag.id)}
+                      >
+                        #{tag.name}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
+            )}
+
+            <div className="gv-field">
+              <label>Castle Image</label>
+              <label className="gv-btn gv-btn-ghost">
+                <Upload size={16} />
+                <span>{imageFile ? imageFile.name : 'Upload image file'}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
+                />
+              </label>
             </div>
 
-            {/* Choose Image Preset */}
-            <div>
-              <label>
-                Castle Visual Theme
-              </label>
-              <div>
-                {IMAGE_PRESETS.map((preset) => {
-                  const isSelected = selectedImageUrl === preset.url;
-                  return (
-                    <div
-                      key={preset.name}
-                      onClick={() => setSelectedImageUrl(preset.url)}
-                    >
-                      <img src={preset.url} alt={preset.name} />
-                      <div>
-                        {isSelected ? '=> ' : ''}{preset.name}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Submit Bar */}
-            <div>
-              <button type="button" onClick={onClose}>
+            <div className="gv-modal-footer">
+              <button className="gv-btn gv-btn-ghost" type="button" onClick={onClose}>
                 Cancel
               </button>
-              <button type="submit">
+              <button className="gv-btn gv-btn-primary" type="submit" disabled={submitting}>
                 <Plus size={16} />
-                <span>Post Castle</span>
+                <span>{submitting ? 'Posting...' : 'Post Castle'}</span>
               </button>
             </div>
           </form>
