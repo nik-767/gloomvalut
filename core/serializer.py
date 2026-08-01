@@ -31,7 +31,7 @@ class gloomvalutseralizer(serializers.ModelSerializer):
         filename = os.path.basename(obj.image.name)
 
         return request.build_absolute_uri(
-            f"/static/core/{filename}"
+            f"/static/core/images/{filename}"
         )
 
 class Registerseralizer(serializers.ModelSerializer):
