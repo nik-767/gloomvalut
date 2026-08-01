@@ -14,8 +14,8 @@ from django.db.models import Avg
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
-
 
 
 
@@ -275,8 +275,10 @@ def Feed(request):
 # apis 
 class gloomvalutview(viewsets.ModelViewSet):
     queryset = Destination.objects.all()
-    
     serializer_class = gloomvalutseralizer
+
+    def perform_create(self, serializer):
+        serializer.save(posted_by=self.request.user)
 
 # creating a function to genrate tokens first 
 def genrate_token(user):
@@ -397,6 +399,8 @@ class ProfileAPI(APIView):
     API view to retrieve public profile information of a specific user.
     Returns profile details, posts created by the user, and follower/following stats.
     """
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, user_id):
         data = get_object_or_404(Profile, user_id=user_id)
         data2 = data.user.destinations.all()
@@ -415,6 +419,23 @@ class ProfileAPI(APIView):
             'followers_count': followers_count,
             'following_count': following_count
         })
+
+    def patch(self, request, user_id):
+        if request.user.id != user_id:
+            return Response(
+                {'error': 'You can only edit your own profile.'},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        profile = get_object_or_404(Profile, user_id=user_id)
+        profile.bio = request.data.get('bio', profile.bio)
+
+        if request.FILES.get('pic'):
+            profile.pic = request.FILES.get('pic')
+
+        profile.save()
+        serializer = Profileseralizer(profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 
