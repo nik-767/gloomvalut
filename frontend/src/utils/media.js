@@ -1,5 +1,6 @@
 /** Base URL for Django media files served outside the API prefix. */
-export const MEDIA_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/+$/, '');
+export const MEDIA_BASE_URL = API_BASE_URL.replace(/\/api$/, '');
 
 /**
  * Converts a backend media path into a full browser URL.

@@ -1,4 +1,4 @@
-import api from './axios';
+import axiosInstance from './axios';
 import { getUserIdFromToken } from '../utils/jwt';
 
 /**
@@ -22,7 +22,7 @@ const normalizeAuthPayload = (data = {}) => {
  * Registers a new guild member and returns the backend response with JWT tokens.
  */
 export const registerUser = async (userData) => {
-  const response = await api.post('/register/', normalizeAuthPayload(userData));
+  const response = await axiosInstance.post('register/', normalizeAuthPayload(userData));
   return response.data;
 };
 
@@ -30,7 +30,7 @@ export const registerUser = async (userData) => {
  * Logs a user in and returns access/refresh tokens from Simple JWT.
  */
 export const loginUser = async (credentials) => {
-  const response = await api.post('login/', normalizeAuthPayload(credentials));
+  const response = await axiosInstance.post('login/', normalizeAuthPayload(credentials));
   return response.data;
 };
 
@@ -38,7 +38,7 @@ export const loginUser = async (credentials) => {
  * Requests a fresh access token using the stored refresh token.
  */
 export const refreshToken = async (refresh) => {
-  const response = await api.post('token/refresh/', { refresh });
+  const response = await axiosInstance.post('token/refresh/', { refresh });
   return response.data;
 };
 
