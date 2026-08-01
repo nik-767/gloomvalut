@@ -11,13 +11,18 @@ import { useAuth } from '../context/AuthContext';
 import { useDestinations } from '../hooks/useDestinations';
 import { useAppData } from '../hooks/useAppData';
 
+/**
+ * Defines public auth flow and all authenticated application routes.
+ */
 export default function AppRoutes() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, loading, logout } = useAuth();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  
-  // We keep this here just for the global Add Modal
-  const { handleAddDestination } = useDestinations(user);
+  const { handleAddDestination } = useDestinations();
   const { tags } = useAppData();
+
+  if (loading) {
+    return <div className="gv-auth-shell"><p className="gv-loading">Opening the vault...</p></div>;
+  }
 
   if (!isAuthenticated) {
     return <AuthPage />;
