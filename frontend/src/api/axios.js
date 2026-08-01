@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-const API_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/+$/, '');
+const rawApiUrl = (import.meta.env.VITE_API_URL || 'https://gloomvalut.onrender.com/api').trim();
+const API_URL = rawApiUrl.replace(/\/+$/, '');
+const normalizedApiUrl = API_URL.endsWith('/api') ? API_URL : `${API_URL}/api`;
 
 const axiosInstance = axios.create({
-    baseURL: API_URL,
+    baseURL: normalizedApiUrl,
 });
 
 axiosInstance.interceptors.request.use(

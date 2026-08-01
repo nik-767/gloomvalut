@@ -1,6 +1,9 @@
 /** Base URL for Django media files served outside the API prefix. */
-const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/+$/, '');
-export const MEDIA_BASE_URL = API_BASE_URL.replace(/\/api$/, '');
+const rawApiUrl = (import.meta.env.VITE_API_URL || 'https://gloomvalut.onrender.com/api').trim();
+const API_BASE_URL = rawApiUrl.replace(/\/+$/, '');
+export const MEDIA_BASE_URL = API_BASE_URL.endsWith('/api')
+  ? API_BASE_URL.replace(/\/api$/, '')
+  : API_BASE_URL;
 
 /**
  * Converts a backend media path into a full browser URL.
