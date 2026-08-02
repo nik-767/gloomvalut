@@ -39,6 +39,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('home/', home , name='home' ),
     path('review/<int:Destination_id>/', review_view, name='review_view'),
+    path('add_castle/', views.add_castle, name='add_castle'),  # <--- ADD THIS LINE!
     path('delete/<int:id>/', views.delete_review, name='delete_review'),
     path('review/<int:id>/update.html', Update_view, name='Update_view'),
     path('update/<int:id>/', views.Update_castle, name='update_card'),
