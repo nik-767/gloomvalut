@@ -3,6 +3,7 @@ import os
 from rest_framework import serializers
 from .models import Destination , Review , Profile , Follow , Tag
 from django.contrib.auth.models import User
+from django.conf import settings
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
