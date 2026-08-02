@@ -32,7 +32,6 @@ router = routers.DefaultRouter()
 router.register(r'gloomvalutview', views.gloomvalutview)
 router.register(r'Reviewview', views.Reviewview)
 router.register(r'profileview', views.Profileview)
-router.register(r'tags', views.TagViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
