@@ -141,10 +141,15 @@ STATICFILES_DIRS = [
 ]
 
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {"location": str(BASE_DIR / "media")},
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 WHITENOISE_USE_FINDERS = True
 
 
