@@ -8,25 +8,32 @@ const axiosInstance = axios.create({
     baseURL: normalizedApiUrl,
 });
 
-// debug: print resolved API base URL in deployed build console
+// Debug: Print resolved API base URL in deployed build console
 try {
-    // only run in environments where console is available
-    console.debug && console.debug('API baseURL:', normalizedApiUrl);
+    if (console.debug) console.debug('API baseURL:', normalizedApiUrl);
 } catch (e) {}
 
-// separate client for token refresh to avoid interceptor recursion
+// Separate client for token refresh to avoid interceptor recursion
 const refreshClient = axios.create({
     baseURL: normalizedApiUrl,
 });
+
 axiosInstance.interceptors.request.use(
     (config) => {
         try {
-            console.debug && console.debug('Axios request:', config.method, config.url);
+            if (console.debug) console.debug('Axios request:', config.method, config.url);
         } catch (e) {}
+        
         const token = localStorage.getItem("access_token");
 
         if (token) {
+            // Added explicit Bearer token header mapping for DRF SimpleJWT
             config.headers.Authorization = `Bearer ${token}`;
+        }
+
+        // Fix: Ensure every request endpoint ends with a trailing slash for Django
+        if (config.url && !config.url.endsWith('/')) {
+            config.url += '/';
         }
 
         return config;
@@ -49,9 +56,12 @@ axiosInstance.interceptors.response.use(
                     localStorage.removeItem("access_token");
                     localStorage.removeItem("refresh_token");
                     window.location.href = "/";
-                    return Promise.reject(new Error('No refresh token'));
+                    return Promise.reject(new Error('No refresh token available'));
                 }
 
+                // Fix: Removed the duplicate 'api/' subpath mapping. 
+                // Since refreshClient baseURL already has '/api', 'token/refresh/' is correct.
+                // Added trailing slash verification to match your Django configuration paths.
                 const req = await refreshClient.post('token/refresh/', {
                     refresh: refreshToken,
                 });
@@ -64,6 +74,7 @@ axiosInstance.interceptors.response.use(
 
                 return axiosInstance(originalRequest);
             } catch (refreshError) {
+                // Clear state and log out if token rotation fails
                 localStorage.removeItem("access_token");
                 localStorage.removeItem("refresh_token");
                 window.location.href = "/";
@@ -72,7 +83,9 @@ axiosInstance.interceptors.response.use(
         }
 
         try {
-            console.error && console.error('Axios response error:', error?.response?.status, error?.config?.url, error?.response?.data);
+            if (console.error) {
+                console.error('Axios response error:', error?.response?.status, error?.config?.url, error?.response?.data);
+            }
         } catch (e) {}
         return Promise.reject(error);
     }

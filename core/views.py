@@ -437,16 +437,24 @@ class ProfileAPI(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id):
-        data = get_object_or_404(Profile, user_id=user_id)
-        data2 = data.user.destinations.all()
-        followers_count = Follow.objects.filter(following=data.user).count()
-        following_count = Follow.objects.filter(followers=data.user).count()
+        # 1. Fetch the target user object first
+        target_user = get_object_or_404(User, id=user_id)
+        
+        # 2. Get or cleanly generate the profile entry if missing
+        profile, created = Profile.objects.get_or_create(user=target_user)
+        
+        # 3. Retrieve their posts and connection metrics
+        data2 = profile.user.destinations.all()
+        followers_count = Follow.objects.filter(following=profile.user).count()
+        following_count = Follow.objects.filter(followers=profile.user).count()
+        
         is_following = False
         if request.user.is_authenticated:
-            is_following = Follow.objects.filter(followers=request.user, following=data.user).exists()
+            is_following = Follow.objects.filter(followers=request.user, following=profile.user).exists()
         
-        serializer = Profileseralizer(data, context={"request": request})
+        serializer = Profileseralizer(profile, context={"request": request})
         serializer2 = gloomvalutseralizer(data2, many=True, context={"request": request})
+        
         return Response({
             'profile': serializer.data,
             'user_posts': serializer2.data,
@@ -462,7 +470,8 @@ class ProfileAPI(APIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        profile = get_object_or_404(Profile, user_id=user_id)
+        target_user = get_object_or_404(User, id=user_id)
+        profile, created = Profile.objects.get_or_create(user=target_user)
         profile.bio = request.data.get('bio', profile.bio)
 
         if request.FILES.get('pic'):
@@ -471,7 +480,3 @@ class ProfileAPI(APIView):
         profile.save()
         serializer = Profileseralizer(profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-
-
