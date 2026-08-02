@@ -199,4 +199,6 @@ REST_FRAMEWORK = {
     )
     
 }
-DEBUG = False
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+
+
