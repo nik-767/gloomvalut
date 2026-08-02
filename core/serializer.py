@@ -27,30 +27,32 @@ class gloomvalutseralizer(serializers.ModelSerializer):
     def get_image(self, obj):
         if not obj.image:
             return None
+            
         request = self.context.get("request")
 
-        # Try to get the ImageField URL provided by storage
-        img_url = None
+        # 1. ALWAYS PREFER THE STORAGE LAYER URL (Essential for Cloudinary / AWS / Render Disks)
         try:
-            img_url = obj.image.url
+            if obj.image.url:
+                # If it's already an absolute cloud URL, return it directly
+                if obj.image.url.startswith('http://') or obj.image.url.startswith('https://'):
+                    return obj.image.url
+                # Otherwise, let Django build the proper domain path
+                return request.build_absolute_uri(obj.image.url) if request else obj.image.url
         except Exception:
-            img_url = None
+            pass
 
+        # 2. LOCAL FALLBACK: Look inside your static repository paths
         filename = os.path.basename(obj.image.name or '')
+        if filename:
+            static_filepath = os.path.join(settings.BASE_DIR, 'static', 'core', 'images', filename)
+            if os.path.exists(static_filepath):
+                static_url = settings.STATIC_URL.rstrip('/') + f'/core/images/{filename}'
+                return request.build_absolute_uri(static_url) if request else static_url
 
-        # If the file exists in the repository static folder, prefer that URL
-        static_filepath = os.path.join(settings.BASE_DIR, 'static', 'core', 'images', filename)
-        if filename and os.path.exists(static_filepath):
-            static_url = settings.STATIC_URL.rstrip('/') + f'/core/images/{filename}'
-            return request.build_absolute_uri(static_url) if request else static_url
-
-        # Otherwise, if storage gave us a URL (media or storage backend), return absolute
-        if img_url:
-            return request.build_absolute_uri(img_url) if request else img_url
-
-        # Final fallback: construct a static-style path
+        # 3. FINAL FALLBACK: Map straight to generic static layout pathing
         fallback = settings.STATIC_URL.rstrip('/') + f'/core/images/{filename}'
         return request.build_absolute_uri(fallback) if request else fallback
+
 
 class Registerseralizer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)

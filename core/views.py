@@ -480,3 +480,56 @@ class ProfileAPI(APIView):
         profile.save()
         serializer = Profileseralizer(profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+# 5. ADDED: API Endpoint to Update/Delete an Individual Review
+class ReviewDetailAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        review = get_object_or_404(Review, id=pk)
+        if review.user != request.user:
+            return Response(
+                {"error": "You can only edit your own reviews."}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        serializer = Reviewseralizer(review, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        review = get_object_or_404(Review, id=pk)
+        if review.user != request.user:
+            return Response(
+                {"error": "You can only delete your own reviews."}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        review.delete()
+        return Response({"message": "Review deleted successfully."}, status=status.HTTP_200_OK)
+
+
+# 6. ADDED: API Endpoint to Retrieve or Update the Logged-In User's Own Profile Details
+class MyProfileUpdateAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        serializer = Profileseralizer(profile, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        
+        # Support multipart form-data or standard application/json requests
+        bio_data = request.data.get('bio', profile.bio)
+        profile.bio = bio_data
+
+        if request.FILES.get('pic'):
+            profile.pic = request.FILES.get('pic')
+
+        profile.save()
+        serializer = Profileseralizer(profile, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
