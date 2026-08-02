@@ -7,7 +7,14 @@ from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
 from rest_framework.views import APIView , Response 
 from rest_framework import viewsets , status
-from .serializer import gloomvalutseralizer , Registerseralizer , Reviewseralizer , Profileseralizer , Followseralizer
+from .serializer import (
+    gloomvalutseralizer,
+    Registerseralizer,
+    Reviewseralizer,
+    Profileseralizer,
+    Followseralizer,
+    TagSerializer,
+)
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from django.db.models import Avg  
@@ -312,6 +319,12 @@ class Reviewview(viewsets.ModelViewSet):
 class Profileview(viewsets.ViewSet):
     queryset = Profile.objects.all()
     serializer_class = Profileseralizer
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    """Simple ModelViewSet for Tag model so frontend can list/create tags."""
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
     
 class ReviewAPI(APIView):
     permission_classes = [IsAuthenticated]
@@ -390,7 +403,7 @@ class feedAPI(APIView):
     def get(self, request):
         data = Follow.objects.filter(followers=request.user).values_list('following', flat=True)
         data2 = Destination.objects.filter( posted_by_id__in=data).order_by('-id')
-        serializer = gloomvalutseralizer(data2, many=True)
+        serializer = gloomvalutseralizer(data2, many=True, context={"request": request})
         return Response(serializer.data)
 
 
@@ -410,8 +423,8 @@ class ProfileAPI(APIView):
         if request.user.is_authenticated:
             is_following = Follow.objects.filter(followers=request.user, following=data.user).exists()
         
-        serializer = Profileseralizer(data)
-        serializer2 = gloomvalutseralizer(data2, many=True)
+        serializer = Profileseralizer(data, context={"request": request})
+        serializer2 = gloomvalutseralizer(data2, many=True, context={"request": request})
         return Response({
             'profile': serializer.data,
             'user_posts': serializer2.data,

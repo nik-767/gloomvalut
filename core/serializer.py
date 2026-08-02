@@ -26,13 +26,18 @@ class gloomvalutseralizer(serializers.ModelSerializer):
     def get_image(self, obj):
         if not obj.image:
             return None
-
         request = self.context.get("request")
-        filename = os.path.basename(obj.image.name)
+        try:
+            path = obj.image.url
+        except Exception:
+            # fallback: construct from file name similar to previous behavior
+            filename = os.path.basename(obj.image.name)
+            path = f"/static/core/images/{filename}"
 
-        return request.build_absolute_uri(
-            f"/static/core/images/{filename}"
-        )
+        if request:
+            return request.build_absolute_uri(path)
+
+        return path
 
 class Registerseralizer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
