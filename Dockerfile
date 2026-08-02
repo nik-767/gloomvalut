@@ -30,10 +30,7 @@ COPY . .
 # Copy React build into Django static directory
 COPY --from=frontend-build /frontend/dist ./frontend/dist
 
-# Collect static files DURING BUILD
-RUN python manage.py collectstatic --noinput
-
 EXPOSE 8000
 
-# Run migrations and start Gunicorn
-CMD sh -c "python manage.py migrate && gunicorn gloomvalut.wsgi:application --bind 0.0.0.0:${PORT:-8000}"
+# Run migrations, collect static, and start server
+CMD sh -c "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"

@@ -28,12 +28,7 @@ services:
     environment:
       DEBUG: "True"
       ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0"
-      DB_ENGINE: "postgres"
-      DB_NAME: gloomvalut
-      DB_USER: postgres
-      DB_PASSWORD: nikki
-      DB_HOST: db
-      DB_PORT: "5432"
+      DATABASE_URL: "postgresql://postgres:nikki@db:5432/gloomvalut"
     depends_on:
       db:
         condition: service_healthy
