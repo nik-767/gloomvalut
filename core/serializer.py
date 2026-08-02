@@ -27,17 +27,29 @@ class gloomvalutseralizer(serializers.ModelSerializer):
         if not obj.image:
             return None
         request = self.context.get("request")
+
+        # Try to get the ImageField URL provided by storage
+        img_url = None
         try:
-            path = obj.image.url
+            img_url = obj.image.url
         except Exception:
-            # fallback: construct from file name similar to previous behavior
-            filename = os.path.basename(obj.image.name)
-            path = f"/static/core/images/{filename}"
+            img_url = None
 
-        if request:
-            return request.build_absolute_uri(path)
+        filename = os.path.basename(obj.image.name or '')
 
-        return path
+        # If the file exists in the repository static folder, prefer that URL
+        static_filepath = os.path.join(settings.BASE_DIR, 'static', 'core', 'images', filename)
+        if filename and os.path.exists(static_filepath):
+            static_url = settings.STATIC_URL.rstrip('/') + f'/core/images/{filename}'
+            return request.build_absolute_uri(static_url) if request else static_url
+
+        # Otherwise, if storage gave us a URL (media or storage backend), return absolute
+        if img_url:
+            return request.build_absolute_uri(img_url) if request else img_url
+
+        # Final fallback: construct a static-style path
+        fallback = settings.STATIC_URL.rstrip('/') + f'/core/images/{filename}'
+        return request.build_absolute_uri(fallback) if request else fallback
 
 class Registerseralizer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
