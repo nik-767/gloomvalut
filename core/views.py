@@ -234,6 +234,28 @@ def Profile_upd(request):
 
     return render(request,'core/profile_upd.html', {'profile': update} )
 
+@login_required
+def add_castle(request):
+    if request.method == "POST":
+        # Extract fields from form data
+        castle_name = request.POST.get('castle')
+        
+        # Create and map data to Destination model
+        new_castle = Destination(
+            castle=castle_name,
+            posted_by=request.user
+        )
+        
+        # Handle file upload if an image was selected
+        if request.FILES.get('image'):
+            new_castle.image = request.FILES.get('image')
+            
+        new_castle.save()
+        return redirect('home')
+        
+    return redirect('home')
+
+
 @login_required  # Sirf logged-in users ke liye
 def Follows(request,  user_id):
     data = get_object_or_404(User, id =user_id)  # Target user ko database se nikala
